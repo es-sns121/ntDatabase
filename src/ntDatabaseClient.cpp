@@ -93,29 +93,44 @@ bool testStringArray(
 		return false;
 	
 	// Write the string to the record.
-	/*
+	
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	
-	string write_str = genString();
-	putData->putStringArray(write_str);
+	int num_str = (rand()%10) + 20;
+	
+	shared_vector<string> write_str(num_str);
+	
+	for (int i = 0; i < num_str; ++i) 
+	{
+		write_str[i] = genString();
+	}
+	
+	shared_vector<const string> data(freeze(write_str));
+	
+	putData->putStringArray(data);
 	putGet->putGet();
 
 	// Read the data stored in the record.
-	string read_str;
+	shared_vector<const string> read_str;
 	
 	PvaClientGetDataPtr getData = putGet->getGetData();
 
-	read_str = getData->getString();
+	read_str = getData->getStringArray();
+	
+	cout << "\n";
 
-	cout << "\n" << setw(20) << "Write string: " << write_str << "\n";
-	cout << setw(20) << "Read string: " << read_str << "\n\n";
-
-	if (write_str.compare(read_str) != 0)
+	for (int i = 0; i < num_str; ++i) 
 	{
-		return false;
+		cout << setw(20) << "Write string: " << data[i] << "\n";
+		cout << setw(20) << "Read string: " << read_str[i] << "\n\n";
+
+		if (data[i] != read_str[i])
+		{
+			return false;
+		}
 	}
-	*/		
+			
 	return true;
 }
 
