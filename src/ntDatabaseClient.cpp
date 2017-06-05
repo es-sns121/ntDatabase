@@ -8,7 +8,13 @@
  * 	ntDatabaseClient.cpp
  *
  * 	Source file for client side of normative type database test program.
- *
+ *	
+ *	Each normative type and its associated array record is tested. It is 
+ *	written to, and then read from to check for data consistency. 
+ *	
+ *	This program also serves as an example on how to access and manipulate
+ *	these records.
+ * 
  * =======================================================================
  */
 
@@ -31,6 +37,8 @@ using namespace epics::pvaClient;
 string genString() {
 	
 	// Generate pseudo random alphanumeric input to be written to record.
+	
+	// String size between 10 and 50
 	size_t str_len = (rand() % 41) + 10;
 	
 	string str;
@@ -75,9 +83,7 @@ bool testString(
 	cout << setw(20) << "Read string: " << read_str << "\n\n";
 
 	if (write_str.compare(read_str) != 0)
-	{
 		return false;
-	}
 		
 	return true;
 }
@@ -96,39 +102,35 @@ bool testStringArray(
 	
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
-	
+	// Number of strings in array is between 20 and 30
 	int num_str = (rand()%10) + 20;
 	
 	shared_vector<string> write_str(num_str);
 	
 	for (int i = 0; i < num_str; ++i) 
-	{
 		write_str[i] = genString();
-	}
 	
+	// NOTE: when freeze is executed, all data from write_str is removed.
 	shared_vector<const string> data(freeze(write_str));
+	// write_str is now empty.
 	
 	putData->putStringArray(data);
 	putGet->putGet();
 
-	// Read the data stored in the record.
-	shared_vector<const string> read_str;
-	
 	PvaClientGetDataPtr getData = putGet->getGetData();
 
+	// Read the data stored in the record.
+	shared_vector<const string> read_str;
 	read_str = getData->getStringArray();
 	
 	cout << "\n";
-
 	for (int i = 0; i < num_str; ++i) 
 	{
 		cout << setw(20) << "Write string: " << data[i] << "\n";
 		cout << setw(20) << "Read string: " << read_str[i] << "\n\n";
 
 		if (data[i] != read_str[i])
-		{
 			return false;
-		}
 	}
 			
 	return true;
