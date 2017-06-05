@@ -1,0 +1,10 @@
+#!/bin/bash
+#!-*-sh-*-
+
+# Executable
+EXEC=ntDatabaseClient
+# Directory 
+DIR=ntDatabase
+EV4_BASE=~/Epics/EPICS-CPP-4.5.0
+
+$EV4_BASE/$DIR/bin/$EPICS_HOST_ARCH/$EXEC
