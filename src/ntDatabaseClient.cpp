@@ -28,6 +28,23 @@ using namespace epics::pvData;
 using namespace epics::pvAccess;
 using namespace epics::pvaClient;
 
+string genString() {
+	
+	// Generate pseudo random alphanumeric input to be written to record.
+	size_t str_len = (rand() % 41) + 10;
+	
+	string str;
+	str.resize(str_len);
+	
+	for (size_t i = 0; i < str_len; ++i) {
+		// ascii characters 33 -> 126 are printable
+		// not including space which is 32.
+		str[i] = (rand()%94) + 33;
+	}
+
+	return str;
+}
+
 bool testString(
 	PvaClientPtr const &pva,
 	string const &channel_name)
@@ -38,17 +55,7 @@ bool testString(
 	else
 		return false;
 	
-	// Generate pseudo random alphanumeric input to be written to record.
-	size_t str_len = (rand() % 41) + 10;
-	
-	string write_str;
-	write_str.resize(str_len);
-	
-	for (size_t i = 0; i < str_len; ++i) {
-		// ascii characters 33 -> 126 are printable
-		// not including space which is 32.
-		write_str[i] = (rand()%94) + 33;
-	}
+	string write_str = genString();
 
 	// Write the string to the record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
