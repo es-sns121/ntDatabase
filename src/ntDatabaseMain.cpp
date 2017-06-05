@@ -1,4 +1,4 @@
-// ============================================================= //
+// ============================================================= 
 /*	
  *	============================================================
  *	
@@ -48,7 +48,7 @@ int main (int argc, char **argv)
 	// Get the local channel provider.
 	ChannelProviderLocalPtr cpLocal = getChannelProviderLocal();
 
-	// Create the normative type database that is defined in pv/ntDatabase.h
+	// Create the normative type database that is defined locally in pv/ntDatabase.h
 	NTDatabase::create();
 
 	// After the records are added to the database, start the server. 
@@ -80,5 +80,4 @@ int main (int argc, char **argv)
 	return 0;
 }
 
-
-// ============================================================= //
+// ============================================================= 

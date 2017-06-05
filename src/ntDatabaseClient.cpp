@@ -82,6 +82,43 @@ bool testString(
 	return true;
 }
 
+bool testStringArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	// Write the string to the record.
+	/*
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	
+	string write_str = genString();
+	putData->putStringArray(write_str);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	string read_str;
+	
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	read_str = getData->getString();
+
+	cout << "\n" << setw(20) << "Write string: " << write_str << "\n";
+	cout << setw(20) << "Read string: " << read_str << "\n\n";
+
+	if (write_str.compare(read_str) != 0)
+	{
+		return false;
+	}
+	*/		
+	return true;
+}
+
 bool testRecord(
 	PvaClientPtr const &pva,
 	string const &channel_name,
@@ -90,8 +127,15 @@ bool testRecord(
 	bool result(false);
 	if (record_type == "string") 
 	{
-		// call testString function
-		result = testString(pva, channel_name);	
+		if (channel_name == "string")
+			result = testString(pva, channel_name);	
+		else if (channel_name == "stringArray")
+			result = testStringArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
 	}
 	else
 	{
@@ -105,7 +149,8 @@ bool testRecord(
 int main (int argc, char **argv)
 {
 	cout << "ntDatabase Client\n";
-	
+	string types[] = {"string"};
+	int test_num = 1;
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");
@@ -114,17 +159,34 @@ int main (int argc, char **argv)
 		srand(time(NULL));
 
 		bool result;
-		// Basic string test. 
-		result = testRecord(pvaClient, "string01", "string");
-		if (result)
+		string channel_name;
+		for (int i = 0; i < test_num; ++i)
 		{
-			cout << "Record test successful\n";
-		}
-		else 
-		{
-			cout << "Record test unsuccessful\n";
-		}
+			channel_name = types[i];
+			result = testRecord(pvaClient, channel_name, types[i]);
+			if (result)
+			{
+				cout << "Record test successful\n";
+			}
+			else 
+			{
+				cout << "Record test unsuccessful\n";
+			}
 
+			channel_name += "Array";
+			result = testRecord(pvaClient, channel_name, types[i]);
+			if (result)
+			{
+				cout << "Record test successful\n";
+			}
+			else 
+			{
+				cout << "Record test unsuccessful\n";
+			}
+
+			result = false;
+			channel_name.clear();
+		}
 	} catch (std::runtime_error e) {
 		
 		cerr << "exception: " << e.what() << endl;

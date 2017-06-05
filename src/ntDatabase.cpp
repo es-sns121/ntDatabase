@@ -43,6 +43,15 @@ static StandardFieldPtr     standardField = getStandardField();
 static PVDataCreatePtr       pvDataCreate = getPVDataCreate();
 static StandardPVFieldPtr standardPVField = getStandardPVField();
 
+// Generic record creation function.
+// NOTE:
+// By doing it this way you can create a record of any applicable scalar type 
+// with a single function. By modifying it slightly with another argument or 
+// some extra logic to examine the passed recordName (assuming an array records
+// name will have array in it), you could create a function that creates a scalar 
+// record OR a scalar array record instead of always both.
+//
+// Credit for this idea goes to Marty Kraimer
 static void createRecords(
 	PVDatabasePtr const &master,
 	ScalarType scalarType,
@@ -85,9 +94,7 @@ void NTDatabase::create()
 
 	PVDatabasePtr master = PVDatabase::getMaster();
 	
-	createRecords(master, pvString, "string01");
-
-	// bool result(false);
+	createRecords(master, pvString, "string");
 	
 	return;
 }
