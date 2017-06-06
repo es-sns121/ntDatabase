@@ -38,7 +38,7 @@ using namespace epics::pvaClient;
 int main (int argc, char **argv)
 {
 	cout << "ntDatabase Client\n";
-	string types[] = {"string", "byte"};
+	string types[] = {"string", "int"};
 	int test_num = 2;
 	try {
 	
