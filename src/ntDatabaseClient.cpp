@@ -24,6 +24,7 @@
 #include <time.h>
 #include <vector>
 
+#include "ntTest.h"
 
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
@@ -33,8 +34,6 @@ using namespace std;
 using namespace epics::pvData;
 using namespace epics::pvAccess;
 using namespace epics::pvaClient;
-
-
 
 int main (int argc, char **argv)
 {
