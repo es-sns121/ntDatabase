@@ -34,10 +34,10 @@ using namespace epics::pvData;
 using namespace epics::nt;
 using namespace epics::pvDatabase;
 using namespace epics::pvAccess;
-// Defined in pv/ntDatabase.h
+// Defined locally in pv/ntDatabase.h
 using namespace epics::ntDatabase;
 
-// Glocal definitions of singleton builder classes
+// Global definitions of singleton builder classes
 static FieldCreatePtr         fieldCreate = getFieldCreate();
 static StandardFieldPtr     standardField = getStandardField();
 static PVDataCreatePtr       pvDataCreate = getPVDataCreate();
@@ -51,7 +51,7 @@ static StandardPVFieldPtr standardPVField = getStandardPVField();
 // name will have array in it), you could create a function that creates a scalar 
 // record OR a scalar array record instead of always both.
 //
-// Credit for this idea goes to Marty Kraimer
+// Credit for this idea goes to Marty Kraimer at ANL
 static void createRecords(
 	PVDatabasePtr const &master,
 	ScalarType scalarType,
@@ -89,13 +89,16 @@ static void createRecords(
 	return;
 }
 
+// Create function creates and adds records to database.
 void NTDatabase::create()
 {
 
 	PVDatabasePtr master = PVDatabase::getMaster();
-	
+	// Create string and stringArray records.	
 	createRecords(master, pvString, "string");
-	
+	// Create numeric types and numeric type arrays.
+	createRecords(master, pvByte, "byte");
+
 	return;
 }
 

@@ -25,9 +25,9 @@
 #include <vector>
 
 
+#include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
 #include <pv/pvData.h>
-#include <pv/pvAccess.h>
 
 using namespace std;
 using namespace epics::pvData;
@@ -42,13 +42,17 @@ string genString() {
 	size_t str_len = (rand() % 41) + 10;
 	
 	string str;
-	str.resize(str_len);
+	str.resize(str_len + 1);
 	
 	for (size_t i = 0; i < str_len; ++i) {
 		// ascii characters 33 -> 126 are printable
 		// not including space which is 32.
 		str[i] = (rand()%94) + 33;
 	}
+
+	// Oh c++ it has been too long.
+	// Do your strings need to be null terminated? 
+	str[str_len + 1] = '\0';
 
 	return str;
 }
@@ -68,7 +72,7 @@ bool testString(
 	// Write the string to the record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
-
+	
 	putData->putString(write_str);
 	putGet->putGet();
 
@@ -166,8 +170,8 @@ bool testRecord(
 int main (int argc, char **argv)
 {
 	cout << "ntDatabase Client\n";
-	string types[] = {"string"};
-	int test_num = 1;
+	string types[] = {"string", "byte"};
+	int test_num = 2;
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");
