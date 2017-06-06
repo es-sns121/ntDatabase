@@ -46,6 +46,16 @@ bool testStringArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
+char genByte();
+
+bool testByte(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool testByteArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
 int genInt();
 
 bool testInt(
@@ -56,7 +66,7 @@ bool testIntArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
-int genUInt();
+unsigned int genUInt();
 
 bool testUInt(
 	PvaClientPtr const &pva,
@@ -65,6 +75,27 @@ bool testUInt(
 bool testUIntArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
+
+long genLong();
+
+bool testLong(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool testLongArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+unsigned long genULong();
+
+bool testULong(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool testULongArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
 
 bool testRecord(
 	PvaClientPtr const &pva,

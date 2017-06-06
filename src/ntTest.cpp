@@ -85,11 +85,11 @@ bool testStringArray(
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	// Number of strings in array is between 20 and 30
-	int num_str = (rand()%10) + 20;
+	int numstr = (rand()%10) + 20;
 	
-	shared_vector<string> write_str(num_str);
+	shared_vector<string> write_str(numstr);
 	
-	for (int i = 0; i < num_str; ++i) 
+	for (int i = 0; i < numstr; ++i) 
 		write_str[i] = genString();
 	
 	// NOTE: when freeze is executed, all data from write_str is removed.
@@ -106,7 +106,7 @@ bool testStringArray(
 	read_str = getData->getStringArray();
 	
 	cout << "\n";
-	for (int i = 0; i < num_str; ++i) 
+	for (int i = 0; i < numstr; ++i) 
 	{
 		cout << setw(20) << "Write string: " << data[i] << "\n";
 		cout << setw(20) << "Read string: " << read_str[i] << "\n\n";
@@ -118,10 +118,174 @@ bool testStringArray(
 	return true;
 }
 
+char genByte() {
+	return ((rand() % 127) - (126/2));
+}
+
+bool testByte(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	signed short write = genByte();
+
+	putData->getPVStructure()->getSubField<PVByte>("value")->put(write);
+	putGet->putGet();
+
+	signed short read = getData->getPVStructure()->getSubField<PVByte>("value")->get();
+
+	cout << setw(20) << "Write Byte: " << write << "\n";
+	cout << setw(20) << "Read Byte: " << read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testByteArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of ints in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<signed char> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genByte();
+	
+	shared_vector<const signed char> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVByteArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const signed char> read;
+	read = getData->getPVStructure()->getSubField<PVByteArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num; ++i) 
+	{
+		cout << setw(20) << "Write Byte: " << (signed short) write[i] << "\n";
+		cout << setw(20) << "Read Byte: " << (signed short) read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
+char genUByte() {
+	return (rand() % 256);
+}
+
+bool testUByte(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	unsigned char write = genUByte();
+
+	putData->getPVStructure()->getSubField<PVUByte>("value")->put(write);
+	putGet->putGet();
+
+	unsigned char read = getData->getPVStructure()->getSubField<PVUByte>("value")->get();
+
+	cout << setw(20) << "Write UByte: " << (unsigned short) write << "\n";
+	cout << setw(20) << "Read UByte: " << (unsigned short) read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testUByteArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of ints in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<unsigned char> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genUByte();
+	
+	shared_vector<const unsigned char> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVUByteArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const unsigned char> read;
+	read = getData->getPVStructure()->getSubField<PVUByteArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num; ++i) 
+	{
+		cout << setw(20) << "Write UByte: " << (unsigned short) write[i] << "\n";
+		cout << setw(20) << "Read UByte: " << (unsigned short) read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
 // 'Meh' method of generating pseudo random integers across a
 // wide range of positive and negative numbers.
 int genInt() {
-	return ((rand() % INT_MAX) - (INT_MAX/2));
+	return ((rand() % RAND_MAX) - (RAND_MAX/2));
 }
 
 bool testInt(
@@ -172,11 +336,11 @@ bool testIntArray(
 	PvaClientGetDataPtr getData = putGet->getGetData();
 	
 	// Number of ints in array is between 20 and 30
-	int num_int = (rand()%10) + 20;
+	int num = (rand()%10) + 20;
 	
-	shared_vector<int> data(num_int);
+	shared_vector<int> data(num);
 	
-	for (int i = 0; i < num_int; ++i) 
+	for (int i = 0; i < num; ++i) 
 		data[i] = genInt();
 	
 	shared_vector<const int> write(freeze(data));
@@ -190,7 +354,7 @@ bool testIntArray(
 	read = getData->getPVStructure()->getSubField<PVIntArray>("value")->view();
 	
 	cout << "\n";
-	for (int i = 0; i < num_int; ++i) 
+	for (int i = 0; i < num; ++i) 
 	{
 		cout << setw(20) << "Write Int: " << write[i] << "\n";
 		cout << setw(20) << "Read Int: " << read[i] << "\n\n";
@@ -202,8 +366,8 @@ bool testIntArray(
 	return true;
 }
 
-int genUInt() {
-	return (rand() % INT_MAX);
+unsigned int genUInt() {
+	return (rand() % RAND_MAX);
 }
 
 bool testUInt(
@@ -255,11 +419,11 @@ bool testUIntArray(
 	PvaClientGetDataPtr getData = putGet->getGetData();
 	
 	// Number of ints in array is between 20 and 30
-	int num_int = (rand()%10) + 20;
+	int num = (rand()%10) + 20;
 	
-	shared_vector<unsigned int> data(num_int);
+	shared_vector<unsigned int> data(num);
 	
-	for (int i = 0; i < num_int; ++i) 
+	for (int i = 0; i < num; ++i) 
 		data[i] = genUInt();
 	
 	shared_vector<const unsigned int> write(freeze(data));
@@ -273,10 +437,176 @@ bool testUIntArray(
 	read = getData->getPVStructure()->getSubField<PVUIntArray>("value")->view();
 	
 	cout << "\n";
-	for (int i = 0; i < num_int; ++i) 
+	for (int i = 0; i < num; ++i) 
 	{
 		cout << setw(20) << "Write UInt: " << write[i] << "\n";
 		cout << setw(20) << "Read UInt: " << read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
+long genLong() {
+	return ((rand() % (RAND_MAX)) - (RAND_MAX/2));
+}
+
+bool testLong(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	long write = genLong();
+
+	putData->getPVStructure()->getSubField<PVLong>("value")->put(write);
+	putGet->putGet();
+
+	long read = getData->getPVStructure()->getSubField<PVLong>("value")->get();
+	
+	cout << setw(20) << "Write Long: " << write << "\n";
+	cout << setw(20) << "Read Long: " << read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testLongArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of longs in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<long> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genLong();
+	
+	shared_vector<const long> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVLongArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const long> read;
+	read = getData->getPVStructure()->getSubField<PVLongArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num; ++i) 
+	{
+		cout << setw(20) << "Write Long: " << write[i] << "\n";
+		cout << setw(20) << "Read Long: " << read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
+unsigned long genULong() {
+	return (rand() % RAND_MAX);
+}
+
+bool testULong(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	long write = genULong();
+
+	putData->getPVStructure()->getSubField<PVULong>("value")->put(write);
+	putGet->putGet();
+
+	long read = getData->getPVStructure()->getSubField<PVULong>("value")->get();
+	
+	cout << setw(20) << "Write ULong: " << write << "\n";
+	cout << setw(20) << "Read ULong: " << read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testULongArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of longs in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<unsigned long> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genULong();
+	
+	shared_vector<const unsigned long> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVULongArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const unsigned long> read;
+	read = getData->getPVStructure()->getSubField<PVULongArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num; ++i) 
+	{
+		cout << setw(20) << "Write ULong: " << write[i] << "\n";
+		cout << setw(20) << "Read ULong: " << read[i] << "\n\n";
 
 		if (write[i] != read[i])
 			return false;
@@ -303,6 +633,32 @@ bool testRecord(
 			return false;
 		}
 	}
+	else if (record_type == "byte") 
+	{
+		if (channel_name == "byte")
+			result = testByte(pva, channel_name);	
+		else if (channel_name == "byteArray")
+			result = testByteArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "ubyte") 
+	{
+		if (channel_name == "ubyte")
+			result = testUByte(pva, channel_name);	
+		else if (channel_name == "ubyteArray")
+			result = testUByteArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
 	else if (record_type == "int") 
 	{
 		if (channel_name == "int")
@@ -322,6 +678,32 @@ bool testRecord(
 			result = testUInt(pva, channel_name);	
 		else if (channel_name == "uintArray")
 			result = testUIntArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "long") 
+	{
+		if (channel_name == "long")
+			result = testLong(pva, channel_name);	
+		else if (channel_name == "longArray")
+			result = testLongArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "ulong") 
+	{
+		if (channel_name == "ulong")
+			result = testULong(pva, channel_name);	
+		else if (channel_name == "ulongArray")
+			result = testULongArray(pva, channel_name);
 		else 
 		{
 			cerr << "Channel name " << channel_name << " not recognized.\n";
