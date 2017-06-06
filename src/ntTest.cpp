@@ -201,6 +201,90 @@ bool testIntArray(
 			
 	return true;
 }
+
+int genUInt() {
+	return (rand() % INT_MAX);
+}
+
+bool testUInt(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	unsigned int write = genUInt();
+
+	putData->getPVStructure()->getSubField<PVUInt>("value")->put(write);
+	putGet->putGet();
+
+	unsigned int read = getData->getPVStructure()->getSubField<PVUInt>("value")->get();
+	
+	cout << setw(20) << "Write UInt: " << write << "\n";
+	cout << setw(20) << "Read UInt: " << read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testUIntArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of ints in array is between 20 and 30
+	int num_int = (rand()%10) + 20;
+	
+	shared_vector<unsigned int> data(num_int);
+	
+	for (int i = 0; i < num_int; ++i) 
+		data[i] = genUInt();
+	
+	shared_vector<const unsigned int> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVUIntArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const unsigned int> read;
+	read = getData->getPVStructure()->getSubField<PVUIntArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num_int; ++i) 
+	{
+		cout << setw(20) << "Write UInt: " << write[i] << "\n";
+		cout << setw(20) << "Read UInt: " << read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
 bool testRecord(
 	PvaClientPtr const &pva,
 	string const &channel_name,
@@ -225,6 +309,19 @@ bool testRecord(
 			result = testInt(pva, channel_name);	
 		else if (channel_name == "intArray")
 			result = testIntArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "uint") 
+	{
+		if (channel_name == "uint")
+			result = testUInt(pva, channel_name);	
+		else if (channel_name == "uintArray")
+			result = testUIntArray(pva, channel_name);
 		else 
 		{
 			cerr << "Channel name " << channel_name << " not recognized.\n";

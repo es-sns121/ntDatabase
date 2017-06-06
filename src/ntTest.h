@@ -56,6 +56,16 @@ bool testIntArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
+int genUInt();
+
+bool testUInt(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool testUIntArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
 bool testRecord(
 	PvaClientPtr const &pva,
 	string const &channel_name,

@@ -98,6 +98,7 @@ void NTDatabase::create()
 	createRecords(master, pvString, "string");
 	// Create numeric types and numeric type arrays.
 	createRecords(master, pvInt, "int");
+	createRecords(master, pvUInt, "uint");
 
 	return;
 }
