@@ -38,8 +38,8 @@ using namespace epics::pvaClient;
 int main (int argc, char **argv)
 {
 	cout << "ntDatabase Client\n";
-	string types[] = {"string", "ubyte", "byte", "int", "uint", "long", "ulong"};
-	int test_num = 7;
+	string types[] = {"string", "byte", "ubyte", "short", "ushort", "int", "uint", "long", "ulong"};
+	int test_num = 9;
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");

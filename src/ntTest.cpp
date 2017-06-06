@@ -282,6 +282,170 @@ bool testUByteArray(
 	return true;
 }
 
+short genShort() {
+	return (rand() % 32767);
+}
+
+bool testShort(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	short write = genShort();
+
+	putData->getPVStructure()->getSubField<PVShort>("value")->put(write);
+	putGet->putGet();
+
+	short read = getData->getPVStructure()->getSubField<PVShort>("value")->get();
+
+	cout << setw(20) << "Write Short: " << write << "\n";
+	cout << setw(20) << "Read Short: " << read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testShortArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of ints in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<short> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genShort();
+	
+	shared_vector<const short> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVShortArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const short> read;
+	read = getData->getPVStructure()->getSubField<PVShortArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num; ++i) 
+	{
+		cout << setw(20) << "Write Short: " << write[i] << "\n";
+		cout << setw(20) << "Read Short: " << read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
+short genUShort() {
+	return (rand() % 65536);
+}
+
+bool testUShort(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	unsigned short write = genShort();
+
+	putData->getPVStructure()->getSubField<PVUShort>("value")->put(write);
+	putGet->putGet();
+
+	unsigned short read = getData->getPVStructure()->getSubField<PVUShort>("value")->get();
+
+	cout << setw(20) << "Write UShort: " << write << "\n";
+	cout << setw(20) << "Read UShort: " << read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testUShortArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of ints in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<unsigned short> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genShort();
+	
+	shared_vector<const unsigned short> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVUShortArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const unsigned short> read;
+	read = getData->getPVStructure()->getSubField<PVUShortArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num; ++i) 
+	{
+		cout << setw(20) << "Write UShort: " << write[i] << "\n";
+		cout << setw(20) << "Read UShort: " << read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
 // 'Meh' method of generating pseudo random integers across a
 // wide range of positive and negative numbers.
 int genInt() {
@@ -652,6 +816,32 @@ bool testRecord(
 			result = testUByte(pva, channel_name);	
 		else if (channel_name == "ubyteArray")
 			result = testUByteArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "short") 
+	{
+		if (channel_name == "short")
+			result = testShort(pva, channel_name);	
+		else if (channel_name == "shortArray")
+			result = testShortArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "ushort") 
+	{
+		if (channel_name == "ushort")
+			result = testUShort(pva, channel_name);	
+		else if (channel_name == "ushortArray")
+			result = testUShortArray(pva, channel_name);
 		else 
 		{
 			cerr << "Channel name " << channel_name << " not recognized.\n";

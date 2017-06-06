@@ -99,6 +99,8 @@ void NTDatabase::create()
 	// Create numeric types and numeric type arrays.
 	createRecords(master, pvByte, "byte");
 	createRecords(master, pvUByte, "ubyte");
+	createRecords(master, pvShort, "short");
+	createRecords(master, pvUShort, "ushort");
 	createRecords(master, pvInt, "int");
 	createRecords(master, pvUInt, "uint");
 	createRecords(master, pvLong, "long");
