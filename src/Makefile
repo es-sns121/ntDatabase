@@ -4,17 +4,18 @@ TOP=..
 
 include $(TOP)/configure/CONFIG
 
+#USR_CXXFLAGS += -std=c++0x 
 ntDatabaseSRC = $(TOP)/src
 
 # Includes
 INC += pv/ntDatabase.h
-INC += ntTest.h
+INC += ntScalarTest.h
 
 # Lib
 LIBRARY += ntDatabase
 LIBSRCS += ntDatabase.cpp
 LIBRARY += ntTest
-LIBSRCS += ntTest.cpp
+LIBSRCS += ntScalarTest.cpp
 ntDatabase_LIBS += pvaClient pvDatabase pvAccess nt pvData Com
 ntTest_LIBS +=  ntDatabase pvaClient pvDatabase pvAccess nt pvData Com
 
