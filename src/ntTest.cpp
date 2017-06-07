@@ -14,6 +14,10 @@
 
 bool verbosity_flag;
 
+long genInt(long low, long high) {
+	return (low + (rand()%(high*2)));
+}
+
 string genString() {
 	
 	// Generate pseudo random alphanumeric input to be written to record.
@@ -122,10 +126,6 @@ bool testStringArray(
 	return true;
 }
 
-short genShort() {
-	return (rand() % 32767);
-}
-
 bool testShort(
 	PvaClientPtr const &pva,
 	string const &channel_name)
@@ -142,7 +142,7 @@ bool testShort(
 
 	bool result(false);
 
-	short write = genShort();
+	short write = genInt(-32767, 32767);
 
 	putData->getPVStructure()->getSubField<PVShort>("value")->put(write);
 	putGet->putGet();
@@ -182,7 +182,7 @@ bool testShortArray(
 	shared_vector<short> data(num);
 	
 	for (int i = 0; i < num; ++i) 
-		data[i] = genShort();
+		data[i] = genInt(-32767, 32767);
 	
 	shared_vector<const short> write(freeze(data));
 	// the data vector is now empty.
@@ -209,12 +209,6 @@ bool testShortArray(
 	return true;
 }
 
-// 'Meh' method of generating pseudo random integers across a
-// wide range of positive and negative numbers.
-int genInt() {
-	return ((rand() % RAND_MAX) - (RAND_MAX/2));
-}
-
 bool testInt(
 	PvaClientPtr const &pva,
 	string const &channel_name)
@@ -231,7 +225,7 @@ bool testInt(
 
 	bool result(false);
 
-	int write = genInt();
+	int write = genInt(-INT_MAX, INT_MAX);
 
 	putData->getPVStructure()->getSubField<PVInt>("value")->put(write);
 	putGet->putGet();
@@ -255,7 +249,7 @@ bool testIntArray(
 	string const &channel_name)
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
+
 	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
@@ -270,7 +264,7 @@ bool testIntArray(
 	shared_vector<int> data(num);
 	
 	for (int i = 0; i < num; ++i) 
-		data[i] = genInt();
+		data[i] = genInt(-INT_MAX, INT_MAX);
 	
 	shared_vector<const int> write(freeze(data));
 	// the data vector is now empty.
@@ -298,10 +292,6 @@ bool testIntArray(
 	return true;
 }
 
-long genLong() {
-	return ((rand() % (RAND_MAX)) - (RAND_MAX/2));
-}
-
 bool testLong(
 	PvaClientPtr const &pva,
 	string const &channel_name)
@@ -319,7 +309,7 @@ bool testLong(
 
 	bool result(false);
 
-	long write = genLong();
+	long write = genInt(-INT_MAX, INT_MAX);
 
 	putData->getPVStructure()->getSubField<PVLong>("value")->put(write);
 	putGet->putGet();
@@ -358,7 +348,7 @@ bool testLongArray(
 	shared_vector<long> data(num);
 	
 	for (int i = 0; i < num; ++i) 
-		data[i] = genLong();
+		data[i] = genInt(-INT_MAX, INT_MAX);
 	
 	shared_vector<const long> write(freeze(data));
 	// the data vector is now empty.
