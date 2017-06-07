@@ -108,6 +108,7 @@ bool testULongArray(
 
 
 bool testRecord(
+	bool const &verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name,
 	string const &record_type);

@@ -12,6 +12,8 @@
 
 #include "ntTest.h"
 
+bool verbosity_flag;
+
 string genString() {
 	
 	// Generate pseudo random alphanumeric input to be written to record.
@@ -61,8 +63,11 @@ bool testString(
 
 	read_str = getData->getString();
 
-	cout << "\n" << setw(20) << "Write string: " << write_str << "\n";
-	cout << setw(20) << "Read string: " << read_str << "\n\n";
+	if(verbosity_flag)
+	{
+		cout << "\n" << setw(20) << "Write string: " << write_str << "\n";
+		cout << setw(20) << "Read string: " << read_str << "\n\n";
+	}
 
 	if (write_str.compare(read_str) != 0)
 		return false;
@@ -108,8 +113,12 @@ bool testStringArray(
 	cout << "\n";
 	for (int i = 0; i < numstr; ++i) 
 	{
-		cout << setw(20) << "Write string: " << data[i] << "\n";
-		cout << setw(20) << "Read string: " << read_str[i] << "\n\n";
+
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write string: " << data[i] << "\n";
+			cout << setw(20) << "Read string: " << read_str[i] << "\n\n";
+		}
 
 		if (data[i] != read_str[i])
 			return false;
@@ -145,8 +154,11 @@ bool testBool(
 
 	bool read = getData->getPVStructure()->getSubField<PVBoolean>("value")->get();
 
-	cout << setw(20) << "Write Bool: " << write << "\n";
-	cout << setw(20) << "Read Bool: " << read << "\n\n";
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write Bool: " << write << "\n";
+		cout << setw(20) << "Read Bool: " << read << "\n\n";
+	}
 
 	if (write == read)
 		result = true;
@@ -190,8 +202,12 @@ bool testBoolArray(
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
-		cout << setw(20) << "Write Bool: " << (bool) write[i] << "\n";
-		cout << setw(20) << "Read Bool: " << (bool) read[i] << "\n\n";
+		
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write Bool: " << (bool) write[i] << "\n";
+			cout << setw(20) << "Read Bool: " << (bool) read[i] << "\n\n";
+		}
 
 		if (write[i] != read[i])
 			return false;
@@ -227,8 +243,11 @@ bool testByte(
 
 	signed short read = getData->getPVStructure()->getSubField<PVByte>("value")->get();
 
-	cout << setw(20) << "Write Byte: " << write << "\n";
-	cout << setw(20) << "Read Byte: " << read << "\n\n";
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write Byte: " << write << "\n";
+		cout << setw(20) << "Read Byte: " << read << "\n\n";
+	}
 
 	if (write == read)
 		result = true;
@@ -272,8 +291,12 @@ bool testByteArray(
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
-		cout << setw(20) << "Write Byte: " << (signed short) write[i] << "\n";
-		cout << setw(20) << "Read Byte: " << (signed short) read[i] << "\n\n";
+		
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write Byte: " << (signed short) write[i] << "\n";
+			cout << setw(20) << "Read Byte: " << (signed short) read[i] << "\n\n";
+		}
 
 		if (write[i] != read[i])
 			return false;
@@ -309,8 +332,11 @@ bool testUByte(
 
 	unsigned char read = getData->getPVStructure()->getSubField<PVUByte>("value")->get();
 
-	cout << setw(20) << "Write UByte: " << (unsigned short) write << "\n";
-	cout << setw(20) << "Read UByte: " << (unsigned short) read << "\n\n";
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write UByte: " << (unsigned short) write << "\n";
+		cout << setw(20) << "Read UByte: " << (unsigned short) read << "\n\n";
+	}
 
 	if (write == read)
 		result = true;
@@ -354,9 +380,11 @@ bool testUByteArray(
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
-		cout << setw(20) << "Write UByte: " << (unsigned short) write[i] << "\n";
-		cout << setw(20) << "Read UByte: " << (unsigned short) read[i] << "\n\n";
-
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write UByte: " << (unsigned short) write[i] << "\n";
+			cout << setw(20) << "Read UByte: " << (unsigned short) read[i] << "\n\n";
+		}
 		if (write[i] != read[i])
 			return false;
 	}
@@ -391,8 +419,11 @@ bool testShort(
 
 	short read = getData->getPVStructure()->getSubField<PVShort>("value")->get();
 
-	cout << setw(20) << "Write Short: " << write << "\n";
-	cout << setw(20) << "Read Short: " << read << "\n\n";
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write Short: " << write << "\n";
+		cout << setw(20) << "Read Short: " << read << "\n\n";
+	}
 
 	if (write == read)
 		result = true;
@@ -436,8 +467,11 @@ bool testShortArray(
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
-		cout << setw(20) << "Write Short: " << write[i] << "\n";
-		cout << setw(20) << "Read Short: " << read[i] << "\n\n";
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write Short: " << write[i] << "\n";
+			cout << setw(20) << "Read Short: " << read[i] << "\n\n";
+		}
 
 		if (write[i] != read[i])
 			return false;
@@ -473,8 +507,11 @@ bool testUShort(
 
 	unsigned short read = getData->getPVStructure()->getSubField<PVUShort>("value")->get();
 
-	cout << setw(20) << "Write UShort: " << write << "\n";
-	cout << setw(20) << "Read UShort: " << read << "\n\n";
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write UShort: " << write << "\n";
+		cout << setw(20) << "Read UShort: " << read << "\n\n";
+	}
 
 	if (write == read)
 		result = true;
@@ -518,8 +555,12 @@ bool testUShortArray(
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
-		cout << setw(20) << "Write UShort: " << write[i] << "\n";
-		cout << setw(20) << "Read UShort: " << read[i] << "\n\n";
+		
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write UShort: " << write[i] << "\n";
+			cout << setw(20) << "Read UShort: " << read[i] << "\n\n";
+		}
 
 		if (write[i] != read[i])
 			return false;
@@ -557,9 +598,11 @@ bool testInt(
 
 	int read = getData->getPVStructure()->getSubField<PVInt>("value")->get();
 
-	cout << setw(20) << "Write Int: " << write << "\n";
-	cout << setw(20) << "Read Int: " << read << "\n\n";
-
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write Int: " << write << "\n";
+		cout << setw(20) << "Read Int: " << read << "\n\n";
+	}
 	if (write == read)
 		result = true;
 
@@ -602,8 +645,12 @@ bool testIntArray(
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
-		cout << setw(20) << "Write Int: " << write[i] << "\n";
-		cout << setw(20) << "Read Int: " << read[i] << "\n\n";
+		
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write Int: " << write[i] << "\n";
+			cout << setw(20) << "Read Int: " << read[i] << "\n\n";
+		}
 
 		if (write[i] != read[i])
 			return false;
@@ -640,8 +687,11 @@ bool testUInt(
 
 	unsigned int read = getData->getPVStructure()->getSubField<PVUInt>("value")->get();
 	
-	cout << setw(20) << "Write UInt: " << write << "\n";
-	cout << setw(20) << "Read UInt: " << read << "\n\n";
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write UInt: " << write << "\n";
+		cout << setw(20) << "Read UInt: " << read << "\n\n";
+	}
 
 	if (write == read)
 		result = true;
@@ -684,10 +734,12 @@ bool testUIntArray(
 	
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
-	{
-		cout << setw(20) << "Write UInt: " << write[i] << "\n";
-		cout << setw(20) << "Read UInt: " << read[i] << "\n\n";
-
+	{	
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write UInt: " << write[i] << "\n";
+			cout << setw(20) << "Read UInt: " << read[i] << "\n\n";
+		}
 		if (write[i] != read[i])
 			return false;
 	}
@@ -723,9 +775,11 @@ bool testLong(
 
 	long read = getData->getPVStructure()->getSubField<PVLong>("value")->get();
 	
-	cout << setw(20) << "Write Long: " << write << "\n";
-	cout << setw(20) << "Read Long: " << read << "\n\n";
-
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write Long: " << write << "\n";
+		cout << setw(20) << "Read Long: " << read << "\n\n";
+	}
 	if (write == read)
 		result = true;
 
@@ -767,10 +821,12 @@ bool testLongArray(
 	
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
-	{
-		cout << setw(20) << "Write Long: " << write[i] << "\n";
-		cout << setw(20) << "Read Long: " << read[i] << "\n\n";
-
+	{	
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write Long: " << write[i] << "\n";
+			cout << setw(20) << "Read Long: " << read[i] << "\n\n";
+		}
 		if (write[i] != read[i])
 			return false;
 	}
@@ -806,9 +862,11 @@ bool testULong(
 
 	long read = getData->getPVStructure()->getSubField<PVULong>("value")->get();
 	
-	cout << setw(20) << "Write ULong: " << write << "\n";
-	cout << setw(20) << "Read ULong: " << read << "\n\n";
-
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write ULong: " << write << "\n";
+		cout << setw(20) << "Read ULong: " << read << "\n\n";
+	}
 	if (write == read)
 		result = true;
 
@@ -851,9 +909,11 @@ bool testULongArray(
 	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
-		cout << setw(20) << "Write ULong: " << write[i] << "\n";
-		cout << setw(20) << "Read ULong: " << read[i] << "\n\n";
-
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write ULong: " << write[i] << "\n";
+			cout << setw(20) << "Read ULong: " << read[i] << "\n\n";
+		}
 		if (write[i] != read[i])
 			return false;
 	}
@@ -862,10 +922,13 @@ bool testULongArray(
 }
 
 bool testRecord(
+	bool const &verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name,
 	string const &record_type)
 {
+	verbosity_flag = verbosity;
+
 	bool result(false);
 	if (record_type == "string") 
 	{

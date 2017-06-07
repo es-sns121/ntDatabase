@@ -37,6 +37,29 @@ using namespace epics::pvaClient;
 
 int main (int argc, char **argv)
 {
+	bool verbosity(false);
+
+	if (argc > 1 && argv[1] != NULL) 
+	{
+		string arg(argv[1]);
+		if (arg == "-v") 
+		{
+			// Set the verbosity flag.	
+			verbosity = true;		
+		}
+		else if (arg == "-h")
+		{
+			cout << "Help not yet implemented. Try again later." << endl;
+			return 0;
+		}
+		else
+		{
+			cout << "Unrecognized option: '" << arg
+			     << "'. ('ntDatabaseClient -h' for help.)\n"; 
+			return 1;
+		}
+	}
+	
 	cout << "ntDatabase Client\n";
 	string types[] = {"string", "boolean", "byte", "ubyte", "short", "ushort", "int", "uint", "long", "ulong"};
 	int test_num = 10;
@@ -52,7 +75,7 @@ int main (int argc, char **argv)
 		for (int i = 0; i < test_num; ++i)
 		{
 			channel_name = types[i];
-			result = testRecord(pvaClient, channel_name, types[i]);
+			result = testRecord(verbosity, pvaClient, channel_name, types[i]);
 			if (result)
 			{
 				cout << "Record test successful\n";
@@ -63,7 +86,7 @@ int main (int argc, char **argv)
 			}
 
 			channel_name += "Array";
-			result = testRecord(pvaClient, channel_name, types[i]);
+			result = testRecord(verbosity, pvaClient, channel_name, types[i]);
 			if (result)
 			{
 				cout << "Record test successful\n";
