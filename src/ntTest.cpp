@@ -65,7 +65,7 @@ bool testString(
 
 	if(verbosity_flag)
 	{
-		cout << "\n" << setw(20) << "Write string: " << write_str << "\n";
+		cout << setw(20) << "Write string: " << write_str << "\n";
 		cout << setw(20) << "Read string: " << read_str << "\n\n";
 	}
 
@@ -374,6 +374,101 @@ bool testLongArray(
 	return true;
 }
 
+double genDouble() 
+{
+	double f = (double)rand() / RAND_MAX;
+	return -INT_MAX + f * (INT_MAX);
+}
+
+bool testDouble(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	double write = genDouble();
+
+	// Write the string to the record.
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	
+	putData->putDouble(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	double read;
+	
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	read = getData->getDouble();
+
+	if(verbosity_flag)
+	{
+		cout << "\n" << setw(20) << "Write double: " << write << "\n";
+		cout << setw(20) << "Read double: " << read << "\n\n";
+	}
+
+	if (write != read)
+		return false;
+		
+	return true;
+}
+
+bool testDoubleArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	// Write the string to the record.
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	// Number of strings in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<double> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genDouble();
+	
+	// NOTE: when freeze is executed, all data from write_str is removed.
+	shared_vector<const double> write(freeze(data));
+	// write_str is now empty.
+	
+	putData->putDoubleArray(write);
+	putGet->putGet();
+
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	// Read the data stored in the record.
+	shared_vector<const double> read;
+	read = getData->getDoubleArray();
+	
+	for (int i = 0; i < num; ++i) 
+	{
+
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write double: " << write[i] << "\n";
+			cout << setw(20) << "Read double: " << read[i] << "\n\n";
+		}
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
 bool testRecord(
 	bool const &verbosity,
 	PvaClientPtr const &pva,
@@ -427,6 +522,19 @@ bool testRecord(
 			result = testLong(pva, channel_name);	
 		else if (channel_name == "longArray")
 			result = testLongArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "double") 
+	{
+		if (channel_name == "double")
+			result = testDouble(pva, channel_name);	
+		else if (channel_name == "doubleArray")
+			result = testDoubleArray(pva, channel_name);
 		else 
 		{
 			cerr << "Channel name " << channel_name << " not recognized.\n";

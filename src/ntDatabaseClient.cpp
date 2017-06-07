@@ -61,8 +61,8 @@ int main (int argc, char **argv)
 	}
 	
 	cout << "ntDatabase Client\n";
-	string types[] = {"string", "short", "int", "long"};
-	int test_num = 4;
+	string types[] = {"string", "short", "int", "long", "double"};
+	int test_num = 5;
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");

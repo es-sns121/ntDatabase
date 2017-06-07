@@ -39,7 +39,7 @@ bool testStringArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
-int genInt();
+long genInt(long low, long high);
 
 bool testInt(
 	PvaClientPtr const &pva,
@@ -49,8 +49,6 @@ bool testIntArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
-long genLong();
-
 bool testLong(
 	PvaClientPtr const &pva,
 	string const &channel_name);
@@ -58,6 +56,8 @@ bool testLong(
 bool testLongArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
+
+double genDouble();
 
 bool testRecord(
 	bool const &verbosity,
