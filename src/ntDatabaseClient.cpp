@@ -24,7 +24,7 @@
 #include <time.h>
 #include <vector>
 
-#include "ntTest.h"
+#include "ntScalarTest.h"
 
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>

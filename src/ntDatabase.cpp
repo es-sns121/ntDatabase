@@ -27,6 +27,7 @@
 #include <pv/ntscalar.h>
 #include <pv/ntscalarArray.h>
 #include <pv/ntenum.h>
+#include <pv/ntmatrix.h>
 
 using namespace std;
 using std::tr1::static_pointer_cast;
@@ -52,7 +53,7 @@ static StandardPVFieldPtr standardPVField = getStandardPVField();
 // record OR a scalar array record instead of always both.
 //
 // Credit for this idea goes to Marty Kraimer at ANL
-static void createRecords(
+static void createScalarRecords(
 	PVDatabasePtr const &master,
 	ScalarType scalarType,
 	string const &recordNamePrefix)
@@ -92,17 +93,47 @@ static void createRecords(
 // Creates and adds records to database.
 void NTDatabase::create()
 {
+	bool result(false);
+
 	// Get the database hosted by the local provider.
 	PVDatabasePtr master = PVDatabase::getMaster();
 	
 	// Create string and stringArray records.	
-	createRecords(master, pvString, "string");
+	createScalarRecords(master, pvString, "string");
 	// Create numeric type and numeric type array records.
-	createRecords(master, pvShort, "short");
-	createRecords(master, pvInt, "int");
-	createRecords(master, pvLong, "long");
-	createRecords(master, pvDouble, "double");
+	createScalarRecords(master, pvShort, "short");
+	createScalarRecords(master, pvInt, "int");
+	createScalarRecords(master, pvLong, "long");
+	createScalarRecords(master, pvDouble, "double");
+	
+	/* ===================================================== */
+	// Create a NTEnum pvrecord.
+	
+	NTEnumBuilderPtr ntEnumBuilder = NTEnum::createBuilder();
+	
+	PVStructurePtr pvStructure = ntEnumBuilder->
+		addAlarm()->
+		addTimeStamp()->
+		createPVStructure();
+	shared_vector<string> choices(2);
+	choices[0] = "zero";
+	choices[1] = "one";
+	PVStringArrayPtr pvChoices = pvStructure->getSubField<PVStringArray>("value.choices");
+	pvChoices->replace(freeze(choices));
+	result = master->addRecord(PVRecord::create("enum", pvStructure));
+	if (!result) cerr << "Failed to add enum record\n";
 
+	/* ===================================================== */
+	// Create a NTMatrix pvrecord.
+	
+	NTMatrixBuilderPtr ntMatrixBuilder = NTMatrix::createBuilder();
+	
+	pvStructure = ntMatrixBuilder->
+		addAlarm()->
+		addTimeStamp()->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("matrix", pvStructure));
+	if (!result) cerr << "Failed to add matrix record\n";
 	return;
 }
 
