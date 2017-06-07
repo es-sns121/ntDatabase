@@ -24,6 +24,7 @@
 #include <time.h>
 #include <vector>
 
+#include "ntTest.h"
 #include "ntScalarTest.h"
 
 #include <pv/pvAccess.h>
@@ -75,7 +76,7 @@ int main (int argc, char **argv)
 		for (int i = 0; i < test_num; ++i)
 		{
 			channel_name = types[i];
-			result = testRecord(verbosity, pvaClient, channel_name, types[i]);
+			result = testScalarRecord(verbosity, pvaClient, channel_name, types[i]);
 			if (result)
 			{
 				cout << channel_name << " record test successful\n";
@@ -86,7 +87,7 @@ int main (int argc, char **argv)
 			}
 
 			channel_name += "Array";
-			result = testRecord(verbosity, pvaClient, channel_name, types[i]);
+			result = testScalarRecord(verbosity, pvaClient, channel_name, types[i]);
 			if (result)
 			{
 				cout << channel_name << " record test successful\n";
@@ -99,6 +100,19 @@ int main (int argc, char **argv)
 			result = false;
 			channel_name.clear();
 		}
+		channel_name = "enum";
+		result = testEnum(verbosity, pvaClient, channel_name);	
+		if (result)
+		{
+			cout << channel_name << " record test successful\n";
+		}
+		else 
+		{
+			cout << channel_name << " record test unsuccessful\n";
+		}
+
+		
+
 	} catch (std::runtime_error e) {
 		
 		cerr << "exception: " << e.what() << endl;

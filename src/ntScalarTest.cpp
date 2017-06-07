@@ -469,7 +469,7 @@ bool testDoubleArray(
 	return true;
 }
 
-bool testRecord(
+bool testScalarRecord(
 	bool const &verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name,

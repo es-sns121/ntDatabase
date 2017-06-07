@@ -1,9 +1,9 @@
-#ifndef NTTEST_H
-#define NTTEST_H
+#ifndef NTSCALARTEST_H
+#define NTSCALARTEST_H
 
 // ==========================================================
 /*
- *	Header file for normative type test functions.
+ *	Header file for scalar normative type test functions.
  *	
  *	These functions test the operation of some scalar normative types:
  *		string
@@ -59,10 +59,10 @@ bool testLongArray(
 
 double genDouble();
 
-bool testRecord(
+bool testScalarRecord(
 	bool const &verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name,
 	string const &record_type);
 
-#endif /* NTTEST_H */
+#endif /* NTSCALARTEST_H */
