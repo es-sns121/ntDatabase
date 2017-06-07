@@ -106,6 +106,15 @@ bool testULongArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
+float genFloat();
+
+bool testFloat(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool testFloatArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
 
 bool testRecord(
 	bool const &verbosity,

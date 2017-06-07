@@ -911,6 +911,92 @@ bool testULongArray(
 	return true;
 }
 
+float genFloat() {
+	return (-(RAND_MAX/2) + static_cast<float> (rand()));
+}
+
+bool testFloat(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	float write = genFloat();
+
+	putData->getPVStructure()->getSubField<PVFloat>("value")->put(write);
+	putGet->putGet();
+
+	long read = getData->getPVStructure()->getSubField<PVFloat>("value")->get();
+	
+	if(verbosity_flag)
+	{
+		cout << setw(20) << "Write float: " << write << "\n";
+		cout << setw(20) << "Read float: " << read << "\n\n";
+	}
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testFloatArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of longs in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<float> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genFloat();
+	
+	shared_vector<const float> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVFloatArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const float> read;
+	read = getData->getPVStructure()->getSubField<PVFloatArray>("value")->view();
+	
+	for (int i = 0; i < num; ++i) 
+	{
+		if(verbosity_flag)
+		{
+			cout << setw(20) << "Write Float: " << write[i] << "\n";
+			cout << setw(20) << "Read Float: " << read[i] << "\n\n";
+		}
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
 bool testRecord(
 	bool const &verbosity,
 	PvaClientPtr const &pva,
@@ -1042,6 +1128,19 @@ bool testRecord(
 			result = testULong(pva, channel_name);	
 		else if (channel_name == "ulongArray")
 			result = testULongArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
+	}
+	else if (record_type == "float") 
+	{
+		if (channel_name == "float")
+			result = testFloat(pva, channel_name);	
+		else if (channel_name == "floatArray")
+			result = testFloatArray(pva, channel_name);
 		else 
 		{
 			cerr << "Channel name " << channel_name << " not recognized.\n";
