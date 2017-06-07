@@ -118,6 +118,88 @@ bool testStringArray(
 	return true;
 }
 
+bool genBool() {
+	return (bool)(rand() % 2);
+}
+
+bool testBool(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	bool result(false);
+
+	bool write = genBool();
+
+	putData->getPVStructure()->getSubField<PVBoolean>("value")->put(write);
+	putGet->putGet();
+
+	bool read = getData->getPVStructure()->getSubField<PVBoolean>("value")->get();
+
+	cout << setw(20) << "Write Bool: " << write << "\n";
+	cout << setw(20) << "Read Bool: " << read << "\n\n";
+
+	if (write == read)
+		result = true;
+
+	return result;
+
+}
+
+bool testBoolArray(
+	PvaClientPtr const &pva,
+	string const &channel_name)
+{
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return false;
+	
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Number of ints in array is between 20 and 30
+	int num = (rand()%10) + 20;
+	
+	shared_vector<char> data(num);
+	
+	for (int i = 0; i < num; ++i) 
+		data[i] = genBool();
+	
+	shared_vector<const char> write(freeze(data));
+	// the data vector is now empty.
+	
+	putData->getPVStructure()->getSubField<PVBooleanArray>("value")->replace(write);
+	putGet->putGet();
+
+	// Read the data stored in the record.
+	shared_vector<const char> read;
+	read = getData->getPVStructure()->getSubField<PVBooleanArray>("value")->view();
+	
+	cout << "\n";
+	for (int i = 0; i < num; ++i) 
+	{
+		cout << setw(20) << "Write Bool: " << (bool) write[i] << "\n";
+		cout << setw(20) << "Read Bool: " << (bool) read[i] << "\n\n";
+
+		if (write[i] != read[i])
+			return false;
+	}
+			
+	return true;
+}
+
 char genByte() {
 	return ((rand() % 127) - (126/2));
 }
@@ -796,6 +878,19 @@ bool testRecord(
 			cerr << "Channel name " << channel_name << " not recognized.\n";
 			return false;
 		}
+	}
+	else if (record_type == "boolean") 
+	{
+		if (channel_name == "boolean")
+			result = testBool(pva, channel_name);	
+		else if (channel_name == "booleanArray")
+			result = testBoolArray(pva, channel_name);
+		else 
+		{
+			cerr << "Channel name " << channel_name << " not recognized.\n";
+			return false;
+		}
+			
 	}
 	else if (record_type == "byte") 
 	{

@@ -97,6 +97,7 @@ void NTDatabase::create()
 	// Create string and stringArray records.	
 	createRecords(master, pvString, "string");
 	// Create numeric types and numeric type arrays.
+	createRecords(master, pvBoolean, "boolean");
 	createRecords(master, pvByte, "byte");
 	createRecords(master, pvUByte, "ubyte");
 	createRecords(master, pvShort, "short");
@@ -105,6 +106,8 @@ void NTDatabase::create()
 	createRecords(master, pvUInt, "uint");
 	createRecords(master, pvLong, "long");
 	createRecords(master, pvULong, "ulong");
+	createRecords(master, pvFloat, "float");
+	createRecords(master, pvDouble, "double");
 
 	return;
 }

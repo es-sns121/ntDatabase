@@ -46,6 +46,16 @@ bool testStringArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
+bool genBool();
+
+bool testBool(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool testBoolArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
 char genByte();
 
 bool testByte(
