@@ -89,14 +89,15 @@ static void createRecords(
 	return;
 }
 
-// Create function creates and adds records to database.
+// Creates and adds records to database.
 void NTDatabase::create()
 {
-
+	// Get the database hosted by the local provider.
 	PVDatabasePtr master = PVDatabase::getMaster();
+	
 	// Create string and stringArray records.	
 	createRecords(master, pvString, "string");
-	// Create numeric types and numeric type arrays.
+	// Create numeric type and numeric type array records.
 	createRecords(master, pvBoolean, "boolean");
 	createRecords(master, pvByte, "byte");
 	createRecords(master, pvUByte, "ubyte");
