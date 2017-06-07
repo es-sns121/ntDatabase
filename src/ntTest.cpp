@@ -43,7 +43,7 @@ bool testString(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -81,7 +81,7 @@ bool testStringArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -110,7 +110,6 @@ bool testStringArray(
 	shared_vector<const string> read_str;
 	read_str = getData->getStringArray();
 	
-	cout << "\n";
 	for (int i = 0; i < numstr; ++i) 
 	{
 
@@ -137,7 +136,7 @@ bool testBool(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -173,7 +172,7 @@ bool testBoolArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -199,7 +198,6 @@ bool testBoolArray(
 	shared_vector<const char> read;
 	read = getData->getPVStructure()->getSubField<PVBooleanArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
 		
@@ -226,7 +224,7 @@ bool testByte(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -262,7 +260,7 @@ bool testByteArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -288,7 +286,6 @@ bool testByteArray(
 	shared_vector<const signed char> read;
 	read = getData->getPVStructure()->getSubField<PVByteArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
 		
@@ -315,7 +312,7 @@ bool testUByte(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -351,7 +348,7 @@ bool testUByteArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -377,7 +374,6 @@ bool testUByteArray(
 	shared_vector<const unsigned char> read;
 	read = getData->getPVStructure()->getSubField<PVUByteArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
 		if(verbosity_flag)
@@ -402,7 +398,7 @@ bool testShort(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -438,7 +434,7 @@ bool testShortArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -464,7 +460,6 @@ bool testShortArray(
 	shared_vector<const short> read;
 	read = getData->getPVStructure()->getSubField<PVShortArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
 		if(verbosity_flag)
@@ -490,7 +485,7 @@ bool testUShort(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -526,7 +521,7 @@ bool testUShortArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -552,7 +547,6 @@ bool testUShortArray(
 	shared_vector<const unsigned short> read;
 	read = getData->getPVStructure()->getSubField<PVUShortArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
 		
@@ -581,7 +575,7 @@ bool testInt(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -616,7 +610,7 @@ bool testIntArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -642,7 +636,6 @@ bool testIntArray(
 	shared_vector<const int> read;
 	read = getData->getPVStructure()->getSubField<PVIntArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
 		
@@ -669,7 +662,7 @@ bool testUInt(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -706,7 +699,7 @@ bool testUIntArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -732,7 +725,6 @@ bool testUIntArray(
 	shared_vector<const unsigned int> read;
 	read = getData->getPVStructure()->getSubField<PVUIntArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{	
 		if(verbosity_flag)
@@ -757,7 +749,7 @@ bool testLong(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -793,7 +785,7 @@ bool testLongArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -819,7 +811,6 @@ bool testLongArray(
 	shared_vector<const long> read;
 	read = getData->getPVStructure()->getSubField<PVLongArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{	
 		if(verbosity_flag)
@@ -844,7 +835,7 @@ bool testULong(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 
@@ -880,7 +871,7 @@ bool testULongArray(
 {
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
-	if (channel) cout << "Channel \"" << channel_name << "\" connected succesfully\n";
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
 	
@@ -906,7 +897,6 @@ bool testULongArray(
 	shared_vector<const unsigned long> read;
 	read = getData->getPVStructure()->getSubField<PVULongArray>("value")->view();
 	
-	cout << "\n";
 	for (int i = 0; i < num; ++i) 
 	{
 		if(verbosity_flag)

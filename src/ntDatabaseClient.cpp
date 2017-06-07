@@ -78,22 +78,22 @@ int main (int argc, char **argv)
 			result = testRecord(verbosity, pvaClient, channel_name, types[i]);
 			if (result)
 			{
-				cout << "Record test successful\n";
+				cout << channel_name << " record test successful\n";
 			}
 			else 
 			{
-				cout << "Record test unsuccessful\n";
+				cout << channel_name << " record test unsuccessful\n";
 			}
 
 			channel_name += "Array";
 			result = testRecord(verbosity, pvaClient, channel_name, types[i]);
 			if (result)
 			{
-				cout << "Record test successful\n";
+				cout << channel_name << " record test successful\n";
 			}
 			else 
 			{
-				cout << "Record test unsuccessful\n";
+				cout << channel_name << " record test unsuccessful\n";
 			}
 
 			result = false;
