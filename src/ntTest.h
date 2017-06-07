@@ -5,22 +5,15 @@
 /*
  *	Header file for normative type test functions.
  *	
- *	These functions test the operation of the normative types:
+ *	These functions test the operation of some scalar normative types:
  *		string
- *		boolean
- *		byte
- *		ubyte
  *		short
- *		ushort
  *		int
- *		uint
  *		long
- *		ulong
- *		float
  *		double
  *		
  *	There is a corresponding testArray function to each
- *	normative type.
+ *	scalar type.
  *
  */
 // ==========================================================
@@ -46,26 +39,6 @@ bool testStringArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
-bool genBool();
-
-bool testBool(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-bool testBoolArray(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-char genByte();
-
-bool testByte(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-bool testByteArray(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
 int genInt();
 
 bool testInt(
@@ -76,16 +49,6 @@ bool testIntArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
-unsigned int genUInt();
-
-bool testUInt(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-bool testUIntArray(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
 long genLong();
 
 bool testLong(
@@ -93,26 +56,6 @@ bool testLong(
 	string const &channel_name);
 
 bool testLongArray(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-unsigned long genULong();
-
-bool testULong(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-bool testULongArray(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-float genFloat();
-
-bool testFloat(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-bool testFloatArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
