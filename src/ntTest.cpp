@@ -299,7 +299,34 @@ bool testTable(
 		= getData->getPVStructure()->getSubField<PVStringArray>("value.answers")->view();
 	shared_vector<const string> recommendations_read
 		= getData->getPVStructure()->getSubField<PVStringArray>("value.recommendations")->view();
-	
+
+	stringstream out;
+	out << "\n\t" << setw(15) << "labels:";
+	for (size_t i = 0; i < labels.size(); ++i) {
+		out << " " << labels[i];
+	}
+	out << "\n\t" << setw(15) << "questions:";	
+	for (size_t i = 0; i < questions_read.size(); ++i) {
+		out << " " << questions_read[i];
+		if (questions[i] != questions_read[i]) 
+			result = false;
+	}
+	out << "\n\t" << setw(15) << "answers:";	
+	for (size_t i = 0; i < answers_read.size(); ++i) {
+		out << "  " << answers_read[i];
+		if (answers[i] != answers_read[i]) 
+			result = false;
+	}
+	out << "\n\t" << setw(15) << "recommendations:";	
+	for (size_t i = 0; i < recommendations_read.size(); ++i) {
+		out << " " << recommendations_read[i];
+		if (recommendations[i] != recommendations_read[i]) 
+			result = false;
+	}
+	out << "\n\n";
+
+	if (verbosity)
+		cout << out.str();
 	return result;
 }
 
