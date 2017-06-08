@@ -230,15 +230,15 @@ bool testNameValue(
 	shared_vector<const double> value_read = getData->getPVStructure()->getSubField<PVDoubleArray>("value")->view();
 	
 	stringstream out;
-	out << "\n\tnames:";
+	out << "\n\t names:";
 	for(size_t i = 0; i < name_read.size(); ++i) {
-		out << " " << name_read[i];
+		out << right << setw(8) << name_read[i];
 		if (name[i] != name_read[i])
 			result = false;
 	}
 	out << "\n\tvalues:";
 	for(size_t i = 0; i < value_read.size(); ++i) {
-		out << " " << value_read[i];
+		out << setw(8) << value_read[i];
 		if (value[i] != value_read[i])
 			result = false;
 	}
