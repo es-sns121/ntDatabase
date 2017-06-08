@@ -129,11 +129,14 @@ void NTDatabase::create()
 	NTMatrixBuilderPtr ntMatrixBuilder = NTMatrix::createBuilder();
 	
 	pvStructure = ntMatrixBuilder->
+		addDim()->          // Adds dimension field to the matrix. This will define the number 
+							// of columns and rows in the matrix.
 		addAlarm()->
 		addTimeStamp()->
 		createPVStructure();
 	result = master->addRecord(PVRecord::create("matrix", pvStructure));
 	if (!result) cerr << "Failed to add matrix record\n";
+	
 	return;
 }
 

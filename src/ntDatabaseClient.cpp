@@ -100,6 +100,7 @@ int main (int argc, char **argv)
 			result = false;
 			channel_name.clear();
 		}
+		
 		channel_name = "enum";
 		result = testEnum(verbosity, pvaClient, channel_name);	
 		if (result)
@@ -110,9 +111,18 @@ int main (int argc, char **argv)
 		{
 			cout << channel_name << " record test unsuccessful\n";
 		}
-
 		
-
+		channel_name = "matrix";
+		result = testMatrix(verbosity, pvaClient, channel_name);	
+		if (result)
+		{
+			cout << channel_name << " record test successful\n";
+		}
+		else 
+		{
+			cout << channel_name << " record test unsuccessful\n";
+		}
+		
 	} catch (std::runtime_error e) {
 		
 		cerr << "exception: " << e.what() << endl;
