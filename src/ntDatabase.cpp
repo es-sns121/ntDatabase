@@ -31,6 +31,7 @@
 #include <pv/nturi.h>
 #include <pv/ntnameValue.h>
 #include <pv/nttable.h>
+#include <pv/ntattribute.h>
 
 using namespace std;
 using std::tr1::static_pointer_cast;
@@ -174,6 +175,16 @@ void NTDatabase::create()
 		createPVStructure();
 	result = master->addRecord(PVRecord::create("table", pvStructure));
 	if (!result) cerr << "Failed to add table record\n";
+	
+	/* ===================================================== */
+	// Create a NTAttribute pvrecord.
+	
+	NTAttributeBuilderPtr ntAttributeBuilder = NTAttribute::createBuilder();
+	
+	pvStructure = ntAttributeBuilder->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("attribute", pvStructure));
+	if (!result) cerr << "Failed to add attribute record\n";
 	
 	return;
 }

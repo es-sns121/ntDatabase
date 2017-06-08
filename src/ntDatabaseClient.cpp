@@ -155,6 +155,17 @@ int main (int argc, char **argv)
 		{
 			cout << channel_name << " record test unsuccessful\n";
 		}
+		
+		channel_name = "attribute";
+		result = testAttribute(verbosity, pvaClient, channel_name);	
+		if (result)
+		{
+			cout << channel_name << " record test successful\n";
+		}
+		else 
+		{
+			cout << channel_name << " record test unsuccessful\n";
+		}
 
 	} catch (std::runtime_error e) {
 		

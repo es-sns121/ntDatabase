@@ -50,4 +50,9 @@ bool testTable(
 	PvaClientPtr const & pva,
 	string const & channel_name);	
 
+bool testAttribute(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name);	
+
 #endif /* NTTEST_H */

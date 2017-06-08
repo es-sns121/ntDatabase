@@ -330,4 +330,34 @@ bool testTable(
 	return result;
 }
 
+bool testAttribute(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name)
+{
+	bool result(true);
+	
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return result;
+
+	// Create putGet to read and write to/from record.
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	string name   = "The ultimate answer";
+	PVDataCreatePtr pvDataCreate = epics::pvData::getPVDataCreate();
+	PVStringPtr answer = pvDataCreate->createPVScalar<PVString>();
+	answer->put("42");
+	putData->getPVStructure()->getSubField<PVString>("name")->put(name);
+	putData->getPVStructure()->getSubField<PVUnion>("value")->set(answer);
+	
+	putGet->putGet();	
+
+	return result;
+}
+
 // ========================================== BOTTOM ========================================== //
