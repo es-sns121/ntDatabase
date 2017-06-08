@@ -65,7 +65,7 @@ bool testMatrix(
 	PvaClientPtr const & pva,
 	string const & channel_name)
 {
-	bool result(false);
+	bool result(true);
 	
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
@@ -79,20 +79,51 @@ bool testMatrix(
 	PvaClientGetDataPtr getData = putGet->getGetData();
 	
 	// Dimensions of matrix, 2 x 2 for a total of 4 cells.
-	shared_vector<int> data1(2);
-	data1[0] = 2; data1[1] = 2;
+	shared_vector<int> dim_data(2);
+	dim_data[0] = 2; dim_data[1] = 2;
 	
-	// Data to be inserted into matrix.
-	shared_vector<double> data2(4);
-	for (int i = 0; i < 4; ++i) data2[i] = (double) i;
+	// Values to be inserted into matrix.
+	shared_vector<double> val_data(4);
+	for (int i = 0; i < 4; ++i) val_data[i] = (double) i;
 	
-	shared_vector<const int> dim(freeze(data1));
-	shared_vector<const double> value(freeze(data2));
+	shared_vector<const int> dim(freeze(dim_data));
+	shared_vector<const double> value(freeze(val_data));
 	// Note that the data vectors are now empty.
 	
+	// Replace the data in the record's vectors and flush the changed bitsets to the server.
 	putData->getPVStructure()->getSubField<PVIntArray>("dim")->replace(dim);	
 	putData->getPVStructure()->getSubField<PVDoubleArray>("value")->replace(value);	
 	putGet->putGet();
+
+	// Read the data from the record and check that it is correct.
+	shared_vector<const int> read_dim;
+	shared_vector<const double> read_val;
+
+	putGet->getGetData();
+	read_dim = getData->getPVStructure()->getSubField<PVIntArray>("dim")->view();
+	read_val = getData->getPVStructure()->getSubField<PVDoubleArray>("value")->view();
+
+	if (verbosity) {
+		cout << "\n\tMatrix: ";
+		cout << "dim:";
+	}
+	for (size_t i = 0; i < read_dim.size(); ++i) {
+		if (verbosity)	
+			cout << " " << read_dim[i];
+		if (read_dim[i] != dim[i])
+			result = false;
+	}
+	
+	if (verbosity)
+		cout << "\n\t        val:";
+	for (size_t i = 0, j = 0; i < read_val.size() && j < read_dim.size(); ++i) { 
+		if (verbosity)
+			cout << " " << read_val[i];
+		if (read_val[i] != value[i])
+			result = false;
+	}
+	if (verbosity)
+		cout << "\n\n";
 
 	return result;
 }
