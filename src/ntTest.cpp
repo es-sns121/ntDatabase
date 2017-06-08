@@ -192,7 +192,7 @@ bool testNameValue(
 	PvaClientPtr const & pva,
 	string const & channel_name)
 {
-	bool result(false);
+	bool result(true);
 	
 	PvaClientChannelPtr channel = pva->channel(channel_name);
 	
@@ -205,20 +205,47 @@ bool testNameValue(
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
 	
+	// Create a vector of names for the record.
 	shared_vector<string> name_data;
 	name_data.push_back("one");
 	name_data.push_back("two");
 	name_data.push_back("three");
 	shared_vector<const string> name(freeze(name_data));
+	
+	// Create a vector of values for the record.
 	shared_vector<double> value_data;
 	value_data.push_back(1);
 	value_data.push_back(2);
 	value_data.push_back(3);
 	shared_vector<const double> value(freeze(value_data));
 	
+	// Write the names and values to the record.
 	putData->getPVStructure()->getSubField<PVStringArray>("name")->replace(name);
 	putData->getPVStructure()->getSubField<PVDoubleArray>("value")->replace(value);
 	putGet->putGet();
+
+	// Read the names and values from the record.
+	putGet->getGetData();
+	shared_vector<const string> name_read = getData->getPVStructure()->getSubField<PVStringArray>("name")->view();
+	shared_vector<const double> value_read = getData->getPVStructure()->getSubField<PVDoubleArray>("value")->view();
+	
+	stringstream out;
+	out << "\n\tnames:";
+	for(size_t i = 0; i < name_read.size(); ++i) {
+		out << " " << name_read[i];
+		if (name[i] != name_read[i])
+			result = false;
+	}
+	out << "\n\tvalues:";
+	for(size_t i = 0; i < value_read.size(); ++i) {
+		out << " " << value_read[i];
+		if (value[i] != value_read[i])
+			result = false;
+	}
+	out << "\n\n";
+	
+	if (verbosity)
+		cout << out.str();
 
 	return result;
 }
