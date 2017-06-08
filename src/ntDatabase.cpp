@@ -29,6 +29,7 @@
 #include <pv/ntenum.h>
 #include <pv/ntmatrix.h>
 #include <pv/nturi.h>
+#include <pv/ntnameValue.h>
 
 using namespace std;
 using std::tr1::static_pointer_cast;
@@ -139,7 +140,7 @@ void NTDatabase::create()
 	if (!result) cerr << "Failed to add matrix record\n";
 	
 	/* ===================================================== */
-	// Create a NTMatrix pvrecord.
+	// Create a NTURI pvrecord.
 	
 	NTURIBuilderPtr ntURIBuilder = NTURI::createBuilder();
 	
@@ -149,6 +150,16 @@ void NTDatabase::create()
 	result = master->addRecord(PVRecord::create("uri", pvStructure));
 	if (!result) cerr << "Failed to add uri record\n";
 	
+	/* ===================================================== */
+	// Create a NTNameValue pvrecord.
+	
+	NTNameValueBuilderPtr ntNameValueBuilder = NTNameValue::createBuilder();
+	
+	pvStructure = ntNameValueBuilder->
+		value(pvDouble)->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("name_value", pvStructure));
+	if (!result) cerr << "Failed to add name_value record\n";
 
 	return;
 }

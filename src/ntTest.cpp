@@ -186,3 +186,42 @@ bool testURI(
 
 	return result;
 }
+
+bool testNameValue(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name)
+{
+	bool result(false);
+	
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return result;
+
+	// Create putGet to read and write to/from record.
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	shared_vector<string> name_data;
+	name_data.push_back("one");
+	name_data.push_back("two");
+	name_data.push_back("three");
+	shared_vector<const string> name(freeze(name_data));
+	shared_vector<double> value_data;
+	value_data.push_back(1);
+	value_data.push_back(2);
+	value_data.push_back(3);
+	shared_vector<const double> value(freeze(value_data));
+	
+	putData->getPVStructure()->getSubField<PVStringArray>("name")->replace(name);
+	putData->getPVStructure()->getSubField<PVDoubleArray>("value")->replace(value);
+	putGet->putGet();
+
+	return result;
+}
+
+
+// ========================================== BOTTOM ========================================== //
