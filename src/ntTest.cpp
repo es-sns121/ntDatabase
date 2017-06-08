@@ -80,11 +80,11 @@ bool testMatrix(
 	
 	// Dimensions of matrix, 2 x 2 for a total of 4 cells.
 	shared_vector<int> dim_data(2);
-	dim_data[0] = 2; dim_data[1] = 2;
+	dim_data[0] = 5; dim_data[1] = 5;
 	
 	// Values to be inserted into matrix.
-	shared_vector<double> val_data(4);
-	for (int i = 0; i < 4; ++i) val_data[i] = (double) i;
+	shared_vector<double> val_data(25);
+	for (int i = 0; i < 25; ++i) val_data[i] = (double) i;
 	
 	shared_vector<const int> dim(freeze(dim_data));
 	shared_vector<const double> value(freeze(val_data));
@@ -103,27 +103,25 @@ bool testMatrix(
 	read_dim = getData->getPVStructure()->getSubField<PVIntArray>("dim")->view();
 	read_val = getData->getPVStructure()->getSubField<PVDoubleArray>("value")->view();
 
-	if (verbosity) {
-		cout << "\n\tMatrix: ";
-		cout << "dim:";
-	}
+	stringstream out;
+	out << "\n\tMatrix: ";
+	out << "dim:";
 	for (size_t i = 0; i < read_dim.size(); ++i) {
-		if (verbosity)	
-			cout << " " << read_dim[i];
+		out << " " << read_dim[i];
 		if (read_dim[i] != dim[i])
 			result = false;
 	}
 	
-	if (verbosity)
-		cout << "\n\t        val:";
+	out << "\n\t        val:";
 	for (size_t i = 0, j = 0; i < read_val.size() && j < read_dim.size(); ++i) { 
-		if (verbosity)
-			cout << " " << read_val[i];
+		out << " " << read_val[i];
 		if (read_val[i] != value[i])
 			result = false;
 	}
+	out << "\n\n";
+
 	if (verbosity)
-		cout << "\n\n";
+		cout << out.str();
 
 	return result;
 }

@@ -12,6 +12,8 @@
  */
 // ==========================================================
 
+#include <iostream>
+#include <sstream>
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
 #include <pv/pvData.h>
