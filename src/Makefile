@@ -10,12 +10,13 @@ ntDatabaseSRC = $(TOP)/src
 # Includes
 INC += pv/ntDatabase.h
 INC += ntScalarTest.h
+INC += ntTest.h
 
 # Lib
 LIBRARY += ntDatabase
 LIBSRCS += ntDatabase.cpp
 LIBRARY += ntTest
-LIBSRCS += ntScalarTest.cpp
+LIBSRCS += ntScalarTest.cpp ntTest.cpp
 ntDatabase_LIBS += pvaClient pvDatabase pvAccess nt pvData Com
 ntTest_LIBS +=  ntDatabase pvaClient pvDatabase pvAccess nt pvData Com
 
