@@ -169,7 +169,7 @@ void NTDatabase::create()
 	
 	pvStructure = ntTableBuilder->
 		addColumn("questions", pvString)->
-		addColumn("answer", pvString)->
+		addColumn("answers", pvString)->
 		addColumn("recommendations", pvString)->
 		createPVStructure();
 	result = master->addRecord(PVRecord::create("table", pvStructure));

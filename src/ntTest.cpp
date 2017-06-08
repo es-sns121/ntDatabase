@@ -277,18 +277,29 @@ bool testTable(
 	shared_vector<const string> questions(freeze(data));
 	// Create the answer vector.
 	data.push_back("42");
-	shared_vector<const string> answer(freeze(data));
+	shared_vector<const string> answers(freeze(data));
 	// Create the recommendations vector
-	data.push_back("Keep calm");
+	data.push_back("Keep calm.");
 	data.push_back("Always carry a towel.");
 	data.push_back("Drink heavily and read the guide.");
 	shared_vector<const string> recommendations(freeze(data));
-
+	
+	// Write the vectors to the table record. These consitute the tables columns
 	putData->getPVStructure()->getSubField<PVStringArray>("value.questions")->replace(questions);
-	putData->getPVStructure()->getSubField<PVStringArray>("value.answer")->replace(answer);
+	putData->getPVStructure()->getSubField<PVStringArray>("value.answers")->replace(answers);
 	putData->getPVStructure()->getSubField<PVStringArray>("value.recommendations")->replace(recommendations);
 	putGet->putGet();
 
+	putGet->getGetData();
+	shared_vector<const string> labels
+		= getData->getPVStructure()->getSubField<PVStringArray>("labels")->view();
+	shared_vector<const string> questions_read
+		= getData->getPVStructure()->getSubField<PVStringArray>("value.questions")->view();
+	shared_vector<const string> answers_read
+		= getData->getPVStructure()->getSubField<PVStringArray>("value.answers")->view();
+	shared_vector<const string> recommendations_read
+		= getData->getPVStructure()->getSubField<PVStringArray>("value.recommendations")->view();
+	
 	return result;
 }
 
