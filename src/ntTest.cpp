@@ -250,5 +250,46 @@ bool testNameValue(
 	return result;
 }
 
+bool testTable(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name)
+{
+	bool result(true);
+	
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return result;
+
+	// Create putGet to read and write to/from record.
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	// Create the questions vector
+	shared_vector<string> data;
+	data.push_back("Why are we here?");
+	data.push_back("How are we to be happy?");
+	data.push_back("Whats the meaning to life?");
+	data.push_back("Whats the answer to the ultimate question of life, the universe, and everything?");
+	shared_vector<const string> questions(freeze(data));
+	// Create the answer vector.
+	data.push_back("42");
+	shared_vector<const string> answer(freeze(data));
+	// Create the recommendations vector
+	data.push_back("Keep calm");
+	data.push_back("Always carry a towel.");
+	data.push_back("Drink heavily and read the guide.");
+	shared_vector<const string> recommendations(freeze(data));
+
+	putData->getPVStructure()->getSubField<PVStringArray>("value.questions")->replace(questions);
+	putData->getPVStructure()->getSubField<PVStringArray>("value.answer")->replace(answer);
+	putData->getPVStructure()->getSubField<PVStringArray>("value.recommendations")->replace(recommendations);
+	putGet->putGet();
+
+	return result;
+}
 
 // ========================================== BOTTOM ========================================== //

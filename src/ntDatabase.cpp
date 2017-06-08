@@ -30,6 +30,7 @@
 #include <pv/ntmatrix.h>
 #include <pv/nturi.h>
 #include <pv/ntnameValue.h>
+#include <pv/nttable.h>
 
 using namespace std;
 using std::tr1::static_pointer_cast;
@@ -161,6 +162,19 @@ void NTDatabase::create()
 	result = master->addRecord(PVRecord::create("name_value", pvStructure));
 	if (!result) cerr << "Failed to add name_value record\n";
 
+	/* ===================================================== */
+	// Create a NTTable pvrecord.
+	
+	NTTableBuilderPtr ntTableBuilder = NTTable::createBuilder();
+	
+	pvStructure = ntTableBuilder->
+		addColumn("questions", pvString)->
+		addColumn("answer", pvString)->
+		addColumn("recommendations", pvString)->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("table", pvStructure));
+	if (!result) cerr << "Failed to add table record\n";
+	
 	return;
 }
 
