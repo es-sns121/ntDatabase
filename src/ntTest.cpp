@@ -127,4 +127,62 @@ bool testMatrix(
 }
 
 
+bool testURI(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name)
+{
+	bool result(false);
+	
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return result;
 
+	// Create putGet to read and write to/from record.
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+	
+	string scheme_write = "URI scheme string";
+	string path_write = "URI path string";
+	string query_write = "URI query string";
+	
+	// Write data to the record.
+	putData->getPVStructure()->getSubField<PVString>("scheme")->put(scheme_write);
+	putData->getPVStructure()->getSubField<PVString>("path")->put(path_write);
+	putData->getPVStructure()->getSubField<PVString>("query.query")->put(query_write);
+	putGet->putGet();
+
+	string scheme_read;
+	string path_read;
+	string query_read;
+
+	putGet->getGetData();	
+	scheme_read = getData->getPVStructure()->getSubField<PVString>("scheme")->get();
+	path_read = getData->getPVStructure()->getSubField<PVString>("path")->get();
+	query_read = getData->getPVStructure()->getSubField<PVString>("query.query")->get();
+	
+	stringstream out;
+	out << "\n\twrite\n";
+	out << "\t\t" << setw(8) << "scheme: " << scheme_write << endl;
+	out << "\t\t" << setw(8) << "path: " << path_write << endl;
+	out << "\t\t" << setw(8) << "query: " << query_write << endl;
+	
+
+	out << "\tread\n";
+	out << "\t\t" << setw(8) << "scheme: " << scheme_read << endl;
+	out << "\t\t" << setw(8) << "path: " << path_read << endl;
+	out << "\t\t" << setw(8) << "query: " << query_read << endl << endl;
+
+	if (scheme_write == scheme_read &&
+		path_write == path_read &&
+		query_write == query_read)
+		result = true;
+
+	if (verbosity)
+		cout << out.str();
+
+	return result;
+}

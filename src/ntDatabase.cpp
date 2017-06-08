@@ -28,6 +28,7 @@
 #include <pv/ntscalarArray.h>
 #include <pv/ntenum.h>
 #include <pv/ntmatrix.h>
+#include <pv/nturi.h>
 
 using namespace std;
 using std::tr1::static_pointer_cast;
@@ -137,6 +138,18 @@ void NTDatabase::create()
 	result = master->addRecord(PVRecord::create("matrix", pvStructure));
 	if (!result) cerr << "Failed to add matrix record\n";
 	
+	/* ===================================================== */
+	// Create a NTMatrix pvrecord.
+	
+	NTURIBuilderPtr ntURIBuilder = NTURI::createBuilder();
+	
+	pvStructure = ntURIBuilder->
+		addQueryString("query")->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("uri", pvStructure));
+	if (!result) cerr << "Failed to add uri record\n";
+	
+
 	return;
 }
 

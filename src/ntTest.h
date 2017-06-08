@@ -35,4 +35,9 @@ bool testMatrix(
 	PvaClientPtr const & pva,
 	string const & channel_name);	
 
+bool testURI(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name);	
+
 #endif /* NTTEST_H */

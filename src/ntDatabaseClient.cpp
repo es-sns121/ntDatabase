@@ -123,6 +123,17 @@ int main (int argc, char **argv)
 			cout << channel_name << " record test unsuccessful\n";
 		}
 		
+		channel_name = "uri";
+		result = testURI(verbosity, pvaClient, channel_name);	
+		if (result)
+		{
+			cout << channel_name << " record test successful\n";
+		}
+		else 
+		{
+			cout << channel_name << " record test unsuccessful\n";
+		}
+
 	} catch (std::runtime_error e) {
 		
 		cerr << "exception: " << e.what() << endl;
