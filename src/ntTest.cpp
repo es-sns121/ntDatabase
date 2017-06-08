@@ -301,23 +301,23 @@ bool testTable(
 		= getData->getPVStructure()->getSubField<PVStringArray>("value.recommendations")->view();
 
 	stringstream out;
-	out << "\n\t" << setw(15) << "labels:";
+	out << "\n\t" << setw(17) << "labels:";
 	for (size_t i = 0; i < labels.size(); ++i) {
 		out << " " << labels[i];
 	}
-	out << "\n\t" << setw(15) << "questions:";	
+	out << "\n\t" << setw(17) << "questions:";	
 	for (size_t i = 0; i < questions_read.size(); ++i) {
 		out << " " << questions_read[i];
 		if (questions[i] != questions_read[i]) 
 			result = false;
 	}
-	out << "\n\t" << setw(15) << "answers:";	
+	out << "\n\t" << setw(17) << "answers:";	
 	for (size_t i = 0; i < answers_read.size(); ++i) {
 		out << "  " << answers_read[i];
 		if (answers[i] != answers_read[i]) 
 			result = false;
 	}
-	out << "\n\t" << setw(15) << "recommendations:";	
+	out << "\n\t" << setw(17) << "recommendations:";	
 	for (size_t i = 0; i < recommendations_read.size(); ++i) {
 		out << " " << recommendations_read[i];
 		if (recommendations[i] != recommendations_read[i]) 
@@ -349,13 +349,30 @@ bool testAttribute(
 	PvaClientGetDataPtr getData = putGet->getGetData();
 	
 	string name   = "The ultimate answer";
+	// Create a PVType to pass to the union.
 	PVDataCreatePtr pvDataCreate = epics::pvData::getPVDataCreate();
 	PVStringPtr answer = pvDataCreate->createPVScalar<PVString>();
 	answer->put("42");
+	// Use the set function to set the union to the type.
 	putData->getPVStructure()->getSubField<PVString>("name")->put(name);
 	putData->getPVStructure()->getSubField<PVUnion>("value")->set(answer);
-	
+
 	putGet->putGet();	
+
+	putGet->getGetData();
+
+	string name_read = getData->getPVStructure()->getSubField<PVString>("name")->get();
+	string answer_read = getData->getPVStructure()->getSubField<PVUnion>("value")->get<PVString>()->get();
+
+	stringstream out;
+	out << "\n\t name: " << name_read;
+	if (name_read != name) result = false;
+	out << "\n\tvalue: " << answer_read;
+	if (answer_read != answer->get()) result = false;
+	out << "\n\n";
+
+	if (verbosity)
+		cout << out.str();
 
 	return result;
 }
