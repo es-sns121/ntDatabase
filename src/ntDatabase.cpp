@@ -60,7 +60,7 @@ static StandardPVFieldPtr standardPVField = getStandardPVField();
 // name will have array in it), you could create a function that creates a scalar 
 // record OR a scalar array record instead of always both.
 //
-// Credit for this idea goes to Marty Kraimer at ANL
+// Credit for this idea goes to Marty Kraimer at BNL
 static void createScalarRecords(
 	PVDatabasePtr const &master,
 	ScalarType scalarType,
