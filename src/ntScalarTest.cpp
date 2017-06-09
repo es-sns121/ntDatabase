@@ -1,5 +1,6 @@
-// ==========================================================
-/*
+/* 
+ * ==========================================================
+ *	
  *	ntTest.cpp
  *
  *	normative type test source file.
@@ -7,15 +8,16 @@
  *	warning: this code is kind of clunky.
  *	read at your own risk.
  *
+ * ==========================================================
  */
-// ==========================================================
 
 #include "ntScalarTest.h"
 
 bool verbosity_flag;
 
-long genInt(long low, long high) {
-	return (low + (rand()%(high*2)));
+// Crappy method of generating a random integer.
+long genInt(long high) {
+	return rand() % high;
 }
 
 string genString() {
@@ -142,7 +144,7 @@ bool testShort(
 
 	bool result(false);
 
-	short write = genInt(-32767, 32767);
+	short write = genInt(32767);
 
 	putData->getPVStructure()->getSubField<PVShort>("value")->put(write);
 	putGet->putGet();
@@ -182,7 +184,7 @@ bool testShortArray(
 	shared_vector<short> data(num);
 	
 	for (int i = 0; i < num; ++i) 
-		data[i] = genInt(-32767, 32767);
+		data[i] = genInt(32767);
 	
 	shared_vector<const short> write(freeze(data));
 	// the data vector is now empty.
@@ -225,7 +227,7 @@ bool testInt(
 
 	bool result(false);
 
-	int write = genInt(-INT_MAX, INT_MAX);
+	int write = genInt(INT_MAX);
 
 	putData->getPVStructure()->getSubField<PVInt>("value")->put(write);
 	putGet->putGet();
@@ -264,7 +266,7 @@ bool testIntArray(
 	shared_vector<int> data(num);
 	
 	for (int i = 0; i < num; ++i) 
-		data[i] = genInt(-INT_MAX, INT_MAX);
+		data[i] = genInt(INT_MAX);
 	
 	shared_vector<const int> write(freeze(data));
 	// the data vector is now empty.
@@ -309,7 +311,7 @@ bool testLong(
 
 	bool result(false);
 
-	long write = genInt(-INT_MAX, INT_MAX);
+	long write = genInt(INT_MAX);
 
 	putData->getPVStructure()->getSubField<PVLong>("value")->put(write);
 	putGet->putGet();
@@ -348,7 +350,7 @@ bool testLongArray(
 	shared_vector<long> data(num);
 	
 	for (int i = 0; i < num; ++i) 
-		data[i] = genInt(-INT_MAX, INT_MAX);
+		data[i] = genInt(INT_MAX);
 	
 	shared_vector<const long> write(freeze(data));
 	// the data vector is now empty.
@@ -376,8 +378,8 @@ bool testLongArray(
 
 double genDouble() 
 {
-	double f = (double)rand() / RAND_MAX;
-	return -INT_MAX + f * (INT_MAX);
+	double f = (double)rand() / INT_MAX;
+	return f;
 }
 
 bool testDouble(
@@ -469,6 +471,7 @@ bool testDoubleArray(
 	return true;
 }
 
+// Parse the record request and call the respective function.
 bool testScalarRecord(
 	bool const &verbosity,
 	PvaClientPtr const &pva,
@@ -478,72 +481,52 @@ bool testScalarRecord(
 	verbosity_flag = verbosity;
 
 	bool result(false);
-	if (record_type == "string") 
-	{
+	if (record_type == "string") {
 		if (channel_name == "string")
 			result = testString(pva, channel_name);	
 		else if (channel_name == "stringArray")
 			result = testStringArray(pva, channel_name);
-		else 
-		{
+		else {
 			cerr << "Channel name " << channel_name << " not recognized.\n";
 			return false;
 		}
-	}
-	else if (record_type == "short") 
-	{
+	} else if (record_type == "short") {
 		if (channel_name == "short")
 			result = testShort(pva, channel_name);	
 		else if (channel_name == "shortArray")
 			result = testShortArray(pva, channel_name);
-		else 
-		{
+		else {
 			cerr << "Channel name " << channel_name << " not recognized.\n";
 			return false;
-		}
-			
-	}
-	else if (record_type == "int") 
-	{
+		}		
+	} else if (record_type == "int") {
 		if (channel_name == "int")
 			result = testInt(pva, channel_name);	
 		else if (channel_name == "intArray")
 			result = testIntArray(pva, channel_name);
-		else 
-		{
+		else {
 			cerr << "Channel name " << channel_name << " not recognized.\n";
 			return false;
 		}
-			
-	}
-	else if (record_type == "long") 
-	{
+	} else if (record_type == "long") {
 		if (channel_name == "long")
 			result = testLong(pva, channel_name);	
 		else if (channel_name == "longArray")
 			result = testLongArray(pva, channel_name);
-		else 
-		{
+		else {
 			cerr << "Channel name " << channel_name << " not recognized.\n";
 			return false;
-		}
-			
-	}
-	else if (record_type == "double") 
-	{
+		}	
+	} else if (record_type == "double") {
 		if (channel_name == "double")
 			result = testDouble(pva, channel_name);	
 		else if (channel_name == "doubleArray")
 			result = testDoubleArray(pva, channel_name);
-		else 
-		{
+		else {
 			cerr << "Channel name " << channel_name << " not recognized.\n";
 			return false;
-		}
-			
-	}
-	else 
-	{
+		}		
+	} else {
 		cerr << "Record type " << record_type << " not recognized.\n";
 		return false;
 	}
@@ -551,4 +534,3 @@ bool testScalarRecord(
 	return result;
 }
 
-// ==========================================================

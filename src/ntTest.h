@@ -1,9 +1,11 @@
 #ifndef NTTEST_H
 #define NTTEST_H
 
-// ==========================================================
 /*
- *	Header file for normative type test functions.
+ * ==========================================================
+ *	ntTest.h
+ *
+ *	Header file for normative type test and demonstration functions.
  *	
  *	These functions test the operation of some normative types:
  *		NTEnum   (enumerated)
@@ -25,10 +27,10 @@
  * 			Writing data to the record.
  * 			Reading data from the record.
  * 		In the cases where both occur, a further test looking
- * 		for data consistency in the data written to the data
- * 		read is done.
+ * 		for data consistency in the writes and reads is done.
+ *
+ * ==========================================================
  */
-// ==========================================================
 
 #include <iostream>
 #include <sstream>

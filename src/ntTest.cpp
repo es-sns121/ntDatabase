@@ -1,5 +1,10 @@
-// =======================================================================================
 /*
+ * =======================================================================================
+ *
+ *  ntTest.cpp
+ *
+ *	Source file for specific normative type tests and demonstrations.
+ *
  *	The following normative types are "tested" and there functionality 
  *	is shown. 
  *		NTScalar
@@ -19,8 +24,9 @@
  *		NTContinuum
  *		NTHistogram
  *		NTAggregate
+ *
+ * ========================================================================================
  */
-// ========================================================================================
 
 #include "ntTest.h"
 #include <pv/pvAccess.h>
@@ -58,10 +64,10 @@ bool testEnum(
 	// Get current index of choices array in the enum
 	int read = pvStructure->getSubField<PVInt>("value.index")->get();
 	
-	if (verbosity)
-	{
-		cout << "\n\tBefore write: enum(one, zero) = " << choices[read] << endl;
-	}
+	stringstream out;
+	
+	out << "\n\tBefore write: enum(one, zero) = " << choices[read] << endl;
+	
 	
 	// Write a new index to the record.
 	int write = 1;
@@ -73,13 +79,13 @@ bool testEnum(
 	pvStructure = getData->getPVStructure();
 	read = pvStructure->getSubField<PVInt>("value.index")->get();
 
-	if (verbosity)
-	{
-		cout << "\tAfter write: enum(one, zero) = " << choices[read] << endl << endl;
-	}
+	out << "\tAfter write: enum(one, zero) = " << choices[read] << endl << endl;
 
 	if (read == write)
 		result = true;
+	
+	if (verbosity)
+		cout << out.str();
 
 	return result;
 }
@@ -102,7 +108,7 @@ bool testMatrix(
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
 	
-	// Dimensions of matrix, 2 x 2 for a total of 4 cells.
+	// Dimensions of matrix, 5 x 5 for a total of 25 cells.
 	shared_vector<int> dim_data(2);
 	dim_data[0] = 5; dim_data[1] = 5;
 	
@@ -299,9 +305,11 @@ bool testTable(
 	data.push_back("Whats the meaning to life?");
 	data.push_back("Whats the answer to the ultimate question of life, the universe, and everything?");
 	shared_vector<const string> questions(freeze(data));
+	
 	// Create the answer vector.
 	data.push_back("42");
 	shared_vector<const string> answers(freeze(data));
+	
 	// Create the recommendations vector
 	data.push_back("Keep calm.");
 	data.push_back("Always carry a towel.");
@@ -317,14 +325,20 @@ bool testTable(
 	putGet->getGetData();
 	shared_vector<const string> labels
 		= getData->getPVStructure()->getSubField<PVStringArray>("labels")->view();
+	
 	shared_vector<const string> questions_read
 		= getData->getPVStructure()->getSubField<PVStringArray>("value.questions")->view();
+	
 	shared_vector<const string> answers_read
 		= getData->getPVStructure()->getSubField<PVStringArray>("value.answers")->view();
+	
 	shared_vector<const string> recommendations_read
 		= getData->getPVStructure()->getSubField<PVStringArray>("value.recommendations")->view();
 
 	stringstream out;
+	
+	// Print out the read vectors and check for data consistency between write/read
+
 	out << "\n\t" << setw(17) << "labels:";
 	for (size_t i = 0; i < labels.size(); ++i) {
 		out << " " << labels[i];
@@ -401,6 +415,8 @@ bool testAttribute(
 	return result;
 }
 
+// There's no testing going on here. This would be better thought of as a 
+// multi channel demonstration.
 bool testMultiChannel(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -473,4 +489,3 @@ bool testMultiChannel(
 	return result;
 }
 
-// ========================================== BOTTOM ========================================== //

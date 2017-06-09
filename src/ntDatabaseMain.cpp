@@ -1,4 +1,3 @@
-// ============================================================= 
 /*	
  *	============================================================
  *	
@@ -10,14 +9,11 @@
  * 	Main source file of normative type database test 
  * 	program. The programs purpose is to instantiate
  * 	and host a record containing each normative type
- * 	pv structure on a EPICS v4 database. There will be 
+ * 	pv structure on an EPICS v4 database. There will be 
  *  one pvRecord for each normative type. The records'
- *  functionalities will then be tested as they will be 
+ *  functionalities will then be "tested" as they will be 
  *  written to and read from over the network from a 
  *  client program (ntDatabaseClient.cpp).
- *
- *	Additional information is available in the 
- *	included README file.
  *
  *	============================================================
  */
@@ -104,4 +100,3 @@ int main (int argc, char **argv)
 	return 0;
 }
 
-// ============================================================= 

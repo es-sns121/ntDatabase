@@ -1,4 +1,3 @@
-// =============================================================
 /*
  * =============================================================
  * 	Author: Evan Smith
@@ -71,12 +70,14 @@ static void createScalarRecords(
 	
 	NTScalarBuilderPtr ntScalarBuilder = NTScalar::createBuilder();
 	
+	// Create the pvStructure to be inserted into the record.
 	PVStructurePtr pvStructure = ntScalarBuilder->
 		value(scalarType)->
 		addAlarm()->
 		addTimeStamp()->
 		createPVStructure();
-	
+
+	// Create the record and attempty to add it to the database.	
 	PVRecordPtr pvRecord = PVRecord::create(recordName, pvStructure);
 	
 	bool result = master->addRecord(pvRecord);
@@ -107,7 +108,7 @@ void NTDatabase::create()
 	// Get the database hosted by the local provider.
 	PVDatabasePtr master = PVDatabase::getMaster();
 	
-	// Create string and stringArray records.	
+	// Create string and string array records.	
 	createScalarRecords(master, pvString, "string");
 	// Create numeric type and numeric type array records.
 	createScalarRecords(master, pvShort, "short");
@@ -246,4 +247,3 @@ void NTDatabase::create()
 	return;
 }
 
-// =============================================================

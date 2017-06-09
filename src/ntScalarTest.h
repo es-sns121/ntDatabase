@@ -1,8 +1,8 @@
 #ifndef NTSCALARTEST_H
 #define NTSCALARTEST_H
 
-// ==========================================================
 /*
+ * ==========================================================
  *	Header file for scalar normative type test functions.
  *	
  *	These functions test the operation of some scalar normative types:
@@ -21,8 +21,8 @@
  *	These do not serve as intensive tests, but instead are examples to 
  *	demonstrate the functionality of the scalar normative types.
  *
+ * ==========================================================
  */
-// ==========================================================
 
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
@@ -46,8 +46,8 @@ bool testStringArray(
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
-// Generates a "random" integer in the range low to high.
-long genInt(long low, long high);
+// Generates a "random" integer in the range 0 to high.
+long genInt(long high);
 
 bool testInt(
 	PvaClientPtr const &pva,
