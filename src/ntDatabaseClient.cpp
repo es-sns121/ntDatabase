@@ -39,22 +39,21 @@ using namespace epics::pvaClient;
 int main (int argc, char **argv)
 {
 	bool verbosity(false);
+	bool debug(false);
 
-	if (argc > 1 && argv[1] != NULL) 
-	{
+	if (argc > 1 && argv[1] != NULL) {
 		string arg(argv[1]);
-		if (arg == "-v") 
-		{
-			// Set the verbosity flag.	
+		if (arg == "-v") {
 			verbosity = true;		
-		}
-		else if (arg == "-h")
-		{
-			cout << "Help not yet implemented. Try again later." << endl;
+		} else if (arg == "-h") {
+			cout << "Help -- executable flags\n"
+			     << "\t-v (vebose. prints test information)\n"
+				 << "\t-d (debug. prints debug information)\n"
+				 << "\t-h (help. prints help information)\n";
 			return 0;
-		}
-		else
-		{
+		} else if (arg == "-d") {
+			debug = true;
+		} else {
 			cout << "Unrecognized option: '" << arg
 			     << "'. ('ntDatabaseClient -h' for help.)\n"; 
 			return 1;
@@ -67,8 +66,9 @@ int main (int argc, char **argv)
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");
-		// add debug option
-	
+		cout << "debug " << (debug ? "true" : "false") << endl;
+		if (debug) PvaClient::setDebug(true);
+
 		srand(time(NULL));
 
 		bool result;

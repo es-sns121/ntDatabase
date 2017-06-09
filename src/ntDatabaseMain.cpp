@@ -42,6 +42,23 @@ using namespace epics::ntDatabase;
 
 int main (int argc, char **argv)
 {
+
+	bool verbosity(false);
+
+	if (argc > 1 && argv[1]) {
+		if (string(argv[1]) == string("-v")) {
+			verbosity = true;
+		} else if (string(argv[1]) == string("-h")) {
+			// print help info
+			cout << "Help -- executable flags" << endl
+				 << "\t -v (verbose. prints database record names.)\n"
+				 << "\t -h (help. prints help information)\n";
+				 return 1;
+		} else {
+			cout << "unrecognized flag: " << string(argv[1]) << " (use -h for help)." << endl;
+			return 1;
+		}
+	}
 	
 	// Get the master database maintained by the local channel provider.
 	PVDatabasePtr master = PVDatabase::getMaster();
@@ -55,12 +72,19 @@ int main (int argc, char **argv)
 	ServerContext::shared_pointer pvaServer =
 		startPVAServer("local", 0, true, true);
 	
-	// This was in the exampleDatabase but I think I commented it out for some reason.
-	// Investigate further.
-	// master.reset();
+	if (verbosity) {
+		// print the record names currently hosted in the database
+		shared_vector<const string> record_names = master->getRecordNames()->view();
+		cout << "Records currently hosted:\n";
+		for (size_t i = 0; i < record_names.size(); i++) {
+			cout << "\t" << record_names[i] << endl;
+		}
+	}
+
+	// Clear the pointer.
+	master.reset();
 
 	// Wait to die.
-	cout << "ntDatabase\n";
 	string input;
 	while (true)
 	{
