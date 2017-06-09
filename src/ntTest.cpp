@@ -143,8 +143,12 @@ bool testMatrix(
 	}
 	
 	out << "\n\t        val:";
-	for (size_t i = 0, j = 0; i < read_val.size() && j < read_dim.size(); ++i) { 
-		out << " " << read_val[i];
+	for (size_t i = 0, j = 0; i < read_val.size(); ++i, ++j) {
+		if (j == (unsigned) dim[1]) {
+			out << "\n\t            ";
+			j = 0;
+		}
+		out << " " << setw(4) << read_val[i];
 		if (read_val[i] != value[i])
 			result = false;
 	}
