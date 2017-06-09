@@ -1,4 +1,4 @@
-// ===========================================================================================
+// =======================================================================================
 /*
  *	The following normative types are "tested" and there functionality 
  *	is shown. 
@@ -12,7 +12,7 @@
  *
  *	The remaining normative types were added to the database to demonstrate their
  *	functionality. The methods required to interact with them are the same as the 
- *	ones demonstrated here, so for brevity and the relative increased complexity 
+ *	ones demonstrated here, so for brevity and due to the relative increased complexity 
  *	(in the sense they have numerous fields to have to populate and test) of the 
  *	remaining normative types they are excluded.
  *		NTNDArray
@@ -20,6 +20,7 @@
  *		NTHistogram
  *		NTAggregate
  */
+// ========================================================================================
 
 #include "ntTest.h"
 #include <pv/pvAccess.h>
@@ -417,17 +418,6 @@ bool testMultiChannel(
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
-
-	/*
-	 *	Get two records. How? Open up channels to them. How? Using pvaClientChannel ptrs.
-	 *	Insert the two channel names into a shared_vector and replace the mcRecord's channelName 
-	 *	array with it. Get the values held in the two channels connected to records. Fill a 
-	 *	shared_vector of type <PVUnion> and then add the two PVFieldPtrs to the vector. Replace 
-	 *	the vector of the mcRecord with it. Fill the mcRecord's isConnected array with boolean 
-	 *	values representing the connected status of the two channels.
-	 *
-	 *	If all goes well, return true.
-	 */
 
 	// Open two channels to pvRecords currently hosted on an accessible database. You must know that these exist.
 	// We're going to use two records that are already populated in our database.
