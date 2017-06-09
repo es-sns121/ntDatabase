@@ -32,6 +32,7 @@
 #include <pv/ntnameValue.h>
 #include <pv/nttable.h>
 #include <pv/ntattribute.h>
+#include <pv/ntmultiChannel.h>
 
 using namespace std;
 using std::tr1::static_pointer_cast;
@@ -185,6 +186,17 @@ void NTDatabase::create()
 		createPVStructure();
 	result = master->addRecord(PVRecord::create("attribute", pvStructure));
 	if (!result) cerr << "Failed to add attribute record\n";
+	
+	/* ===================================================== */
+	// Create a NTMultiChannel pvrecord.
+	
+	NTMultiChannelBuilderPtr ntMultiChannelBuilder = NTMultiChannel::createBuilder();
+	
+	pvStructure = ntMultiChannelBuilder->
+		addIsConnected()->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("multi_channel", pvStructure));
+	if (!result) cerr << "Failed to add multi_channel record\n";
 	
 	return;
 }

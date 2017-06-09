@@ -55,4 +55,9 @@ bool testAttribute(
 	PvaClientPtr const & pva,
 	string const & channel_name);	
 
+bool testMultiChannel(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name);	
+
 #endif /* NTTEST_H */

@@ -353,7 +353,7 @@ bool testAttribute(
 	PVDataCreatePtr pvDataCreate = epics::pvData::getPVDataCreate();
 	PVStringPtr answer = pvDataCreate->createPVScalar<PVString>();
 	answer->put("42");
-	// Use the set function to set the union to the type.
+	// Use the set function to set the union to the pv.
 	putData->getPVStructure()->getSubField<PVString>("name")->put(name);
 	putData->getPVStructure()->getSubField<PVUnion>("value")->set(answer);
 
@@ -373,6 +373,82 @@ bool testAttribute(
 
 	if (verbosity)
 		cout << out.str();
+
+	return result;
+}
+
+bool testMultiChannel(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name)
+{
+	bool result(true);
+	
+	PvaClientChannelPtr channel = pva->channel(channel_name);
+	
+	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+	else
+		return result;
+
+	// Create putGet to read and write to/from record.
+	PvaClientPutGetPtr putGet = channel->createPutGet("");
+	PvaClientPutDataPtr putData = putGet->getPutData();
+	PvaClientGetDataPtr getData = putGet->getGetData();
+
+	/*
+	 *	Get two records. How? Open up channels to them. How? Using pvaClientChannel ptrs.
+	 *	Insert the two channel names into a shared_vector and replace the mcRecord's channelName 
+	 *	array with it. Get the values held in the two channels connected to records. Fill a 
+	 *	shared_vector of type <PVUnion> and then add the two PVFieldPtrs to the vector. Replace 
+	 *	the vector of the mcRecord with it. Fill the mcRecord's isConnected array with boolean 
+	 *	values representing the connected status of the two channels.
+	 *
+	 *	If all goes well, return true.
+	 */
+
+	// Open two channels to pvRecords currently hosted on an accessible database. You must know that these exist.
+	// We're going to use two records that are already populated in our database.
+	PvaClientChannelPtr channel_long   = pva->channel("long");
+	bool long_connect = (channel_long) ? true : false;
+	PvaClientGetPtr long_get = channel_long->createGet();
+	PvaClientGetDataPtr long_data = long_get->getData();
+	
+	PvaClientChannelPtr channel_double = pva->channel("double");
+	bool double_connect = (channel_double) ? true : false;
+	PvaClientGetPtr double_get = channel_double->createGet();
+	PvaClientGetDataPtr double_data = double_get->getData();
+
+	// Create the channel names vector to populate the record with.
+	shared_vector<string> channelNames_data(2);
+	channelNames_data[0] = "long"; 
+	channelNames_data[1] = "double";
+	shared_vector<const string> channelNames(freeze(channelNames_data));
+
+	// Create the values vector to populate the record with. 
+	// These will be the values currently held in the two connected records.
+	PVDataCreatePtr pvDataCreate = epics::pvData::getPVDataCreate();
+	shared_vector<PVUnionPtr> value_data(2);
+	value_data[0] = pvDataCreate->createPVVariantUnion();
+	value_data[1] = pvDataCreate->createPVVariantUnion();	
+	
+	value_data[0]->set(long_data->getPVStructure()->getSubField<PVLong>("value"));
+	value_data[1]->set(double_data->getPVStructure()->getSubField<PVDouble>("value"));
+	shared_vector<const PVUnionPtr> value(freeze(value_data));
+
+	// Create the connect status vector to populate the record with.
+	shared_vector<char> isConnected_data(2);
+	isConnected_data[0] = long_connect;
+	isConnected_data[1] = double_connect;
+	shared_vector<const char> isConnected(freeze(isConnected_data));
+	
+	putData->getPVStructure()->getSubField<PVStringArray>("channelName")->replace(channelNames);
+	cout << "put channel names" << endl;
+	putData->getPVStructure()->getSubField<PVUnionArray>("value")->replace(value);
+	cout << "put values" << endl;
+	putData->getPVStructure()->getSubField<PVBooleanArray>("isConnected")->replace(isConnected);
+	cout << "put connected status" << endl;
+	
+	putGet->putGet();
 
 	return result;
 }
