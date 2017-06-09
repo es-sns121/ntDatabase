@@ -1,3 +1,26 @@
+// ===========================================================================================
+/*
+ *	The following normative types are "tested" and there functionality 
+ *	is shown. 
+ *		NTScalar
+ *		NTEnum
+ *		NTURI
+ *		NTNameValue
+ *		NTTable
+ *		NTAttribute
+ *		NTMultiChannel
+ *
+ *	The remaining normative types were added to the database to demonstrate their
+ *	functionality. The methods required to interact with them are the same as the 
+ *	ones demonstrated here, so for brevity and the relative increased complexity 
+ *	(in the sense they have numerous fields to have to populate and test) of the 
+ *	remaining normative types they are excluded.
+ *		NTNDArray
+ *		NTContinuum
+ *		NTHistogram
+ *		NTAggregate
+ */
+
 #include "ntTest.h"
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
@@ -409,12 +432,18 @@ bool testMultiChannel(
 	// Open two channels to pvRecords currently hosted on an accessible database. You must know that these exist.
 	// We're going to use two records that are already populated in our database.
 	PvaClientChannelPtr channel_long   = pva->channel("long");
+	
 	bool long_connect = (channel_long) ? true : false;
+	result = (long_connect) ? true : false;
+
 	PvaClientGetPtr long_get = channel_long->createGet();
 	PvaClientGetDataPtr long_data = long_get->getData();
 	
 	PvaClientChannelPtr channel_double = pva->channel("double");
+	
 	bool double_connect = (channel_double) ? true : false;
+	result = (double_connect) ? true : false;
+	
 	PvaClientGetPtr double_get = channel_double->createGet();
 	PvaClientGetDataPtr double_data = double_get->getData();
 
@@ -442,13 +471,14 @@ bool testMultiChannel(
 	shared_vector<const char> isConnected(freeze(isConnected_data));
 	
 	putData->getPVStructure()->getSubField<PVStringArray>("channelName")->replace(channelNames);
-	cout << "put channel names" << endl;
 	putData->getPVStructure()->getSubField<PVUnionArray>("value")->replace(value);
-	cout << "put values" << endl;
 	putData->getPVStructure()->getSubField<PVBooleanArray>("isConnected")->replace(isConnected);
-	cout << "put connected status" << endl;
 	
 	putGet->putGet();
+	putGet->getGetData();
+
+	if (verbosity)
+		cout << getData->getPVStructure() << endl;
 
 	return result;
 }

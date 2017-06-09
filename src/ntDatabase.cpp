@@ -33,6 +33,10 @@
 #include <pv/nttable.h>
 #include <pv/ntattribute.h>
 #include <pv/ntmultiChannel.h>
+#include <pv/ntndarray.h>
+#include <pv/ntcontinuum.h>
+#include <pv/nthistogram.h>
+#include <pv/ntaggregate.h>
 
 using namespace std;
 using std::tr1::static_pointer_cast;
@@ -197,6 +201,47 @@ void NTDatabase::create()
 		createPVStructure();
 	result = master->addRecord(PVRecord::create("multi_channel", pvStructure));
 	if (!result) cerr << "Failed to add multi_channel record\n";
+	
+	/* ===================================================== */
+	// Create a NTNDArray pvrecord.
+	
+	NTNDArrayBuilderPtr ntNDArrayBuilder = NTNDArray::createBuilder();
+	
+	pvStructure = ntNDArrayBuilder->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("ndarray", pvStructure));
+	if (!result) cerr << "Failed to add ndarray record\n";
+	
+	/* ===================================================== */
+	// Create a NTContinuum pvrecord.
+	
+	NTContinuumBuilderPtr ntContinuumBuilder = NTContinuum::createBuilder();
+	
+	pvStructure = ntContinuumBuilder->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("continuum", pvStructure));
+	if (!result) cerr << "Failed to add continuum record\n";
+	
+	/* ===================================================== */
+	// Create a NTHistogram pvrecord.
+	
+	NTHistogramBuilderPtr ntHistogramBuilder = NTHistogram::createBuilder();
+	
+	pvStructure = ntHistogramBuilder->
+		value(pvLong)->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("histogram", pvStructure));
+	if (!result) cerr << "Failed to add histogram record\n";
+	
+	/* ===================================================== */
+	// Create a NTAggregate pvrecord.
+	
+	NTAggregateBuilderPtr ntAggregateBuilder = NTAggregate::createBuilder();
+	
+	pvStructure = ntAggregateBuilder->
+		createPVStructure();
+	result = master->addRecord(PVRecord::create("aggregate", pvStructure));
+	if (!result) cerr << "Failed to add aggregate record\n";
 	
 	return;
 }
