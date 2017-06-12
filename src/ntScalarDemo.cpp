@@ -1,7 +1,7 @@
 /* 
  * ==========================================================
  *	
- *	ntTest.cpp
+ *	ntDemo.cpp
  *
  *	normative type demo source file.
  *	
@@ -11,7 +11,7 @@
  * ==========================================================
  */
 
-#include "ntScalarTest.h"
+#include "ntScalarDemo.h"
 
 bool verbosity_flag;
 
@@ -471,6 +471,8 @@ bool demoDoubleArray(
 	return true;
 }
 
+// This is hideous. Creating a map of recordType/demoFunction key value pairs, and then
+// just searching for the function would be better.
 // Parse the record request and call the respective function.
 bool demoScalarRecord(
 	bool const &verbosity,
