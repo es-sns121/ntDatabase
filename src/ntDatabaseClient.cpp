@@ -6,7 +6,7 @@
  *
  * 	ntDatabaseClient.cpp
  *
- * 	Source file for client side of normative type database test program.
+ * 	Source file for client side of normative type database demonstration program.
  *
  *	This program primarily serves as an example on how to access and manipulate
  *	these normative types when they are held in pvDatabase hosted pvRecords.
@@ -14,8 +14,7 @@
  *	The most used scalar values are strings, shorts, long ints, and doubles. 
  *	So we will be writing to and reading from these scalar normative type records. 
  *	We will also be "testing" for data consistency by comparing the written 
- *	and read information. These do not constitute thorough tests and are
- *	only meant to demonstrate how to read and write from the records.
+ *	and read information to demonstrate how to read and write from the records.
  *
  * 	NOTE: for the sake of brevity, normative type will henceforth be referred to 
  * 	      as 'nt'.
@@ -40,6 +39,16 @@ using namespace std;
 using namespace epics::pvData;
 using namespace epics::pvAccess;
 using namespace epics::pvaClient;
+
+void printResult(const bool &result, const string &channel_name) {
+	if (result) {
+		cout << channel_name << " record test successful\n";
+	} else {
+		cout << channel_name << " record test unsuccessful\n";
+	}
+
+	return;
+}
 
 int main (int argc, char **argv)
 {
@@ -80,125 +89,72 @@ int main (int argc, char **argv)
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");
+		
 		cout << "debug : " << (debug ? "true" : "false") << endl;
 		if (debug) PvaClient::setDebug(true);
+		
 		// seed rand for the generator functions in the test code.
 		srand(time(NULL));
 
-		bool result;
+		bool result(false);
 		string channel_name;
 
 		// Test the scalar and scalar array nt records.
-		for (int i = 0; i < test_num; ++i)
-		{
+		for (int i = 0; i < test_num; ++i) {
 			channel_name = types[i];
 			result = testScalarRecord(verbosity, pvaClient, channel_name, types[i]);
-			if (result)
-			{
-				cout << channel_name << " record test successful\n";
-			}
-			else 
-			{
-				cout << channel_name << " record test unsuccessful\n";
-			}
+			printResult(result, channel_name);
 
 			channel_name += "Array";
 			result = testScalarRecord(verbosity, pvaClient, channel_name, types[i]);
-			if (result)
-			{
-				cout << channel_name << " record test successful\n";
-			}
-			else 
-			{
-				cout << channel_name << " record test unsuccessful\n";
-			}
+			printResult(result, channel_name);
 
 			result = false;
 			channel_name.clear();
 		}
-		// Test the more specific nt records.	
+		
+		/* =============================================================
+				Test the more specific nt records.	
+		*/
+
+		/* NTEnum */
 		channel_name = "enum";
 		result = testEnum(verbosity, pvaClient, channel_name);	
-		if (result)
-		{
-			cout << channel_name << " record test successful\n";
-		}
-		else 
-		{
-			cout << channel_name << " record test unsuccessful\n";
-		}
-		
+		printResult(result, channel_name);
+
+		/* NTMatrix */
 		channel_name = "matrix";
 		result = testMatrix(verbosity, pvaClient, channel_name);	
-		if (result)
-		{
-			cout << channel_name << " record test successful\n";
-		}
-		else 
-		{
-			cout << channel_name << " record test unsuccessful\n";
-		}
-		// Uniform Resouce Identifier 
+		printResult(result, channel_name);
+		
+		/* NTURI (Uniform Resouce Identifier) */ 
 		channel_name = "uri";
 		result = testURI(verbosity, pvaClient, channel_name);	
-		if (result)
-		{
-			cout << channel_name << " record test successful\n";
-		}
-		else 
-		{
-			cout << channel_name << " record test unsuccessful\n";
-		}
+		printResult(result, channel_name);
 		
+		/* NTNameValue */
 		channel_name = "name_value";
 		result = testNameValue(verbosity, pvaClient, channel_name);	
-		if (result)
-		{
-			cout << channel_name << " record test successful\n";
-		}
-		else 
-		{
-			cout << channel_name << " record test unsuccessful\n";
-		}
+		printResult(result, channel_name);
 		
+		/* NTTable */
 		channel_name = "table";
 		result = testTable(verbosity, pvaClient, channel_name);	
-		if (result)
-		{
-			cout << channel_name << " record test successful\n";
-		}
-		else 
-		{
-			cout << channel_name << " record test unsuccessful\n";
-		}
-		
+		printResult(result, channel_name);
+	
+		/* NTAttribute */
 		channel_name = "attribute";
 		result = testAttribute(verbosity, pvaClient, channel_name);	
-		if (result)
-		{
-			cout << channel_name << " record test successful\n";
-		}
-		else 
-		{
-			cout << channel_name << " record test unsuccessful\n";
-		}
+		printResult(result, channel_name);
 
+		/* NTMultiChannel */
 		channel_name = "multi_channel";
 		result = testMultiChannel(verbosity, pvaClient, channel_name);	
-		if (result)
-		{
-			cout << channel_name << " record test successful\n";
-		}
-		else 
-		{
-			cout << channel_name << " record test unsuccessful\n";
-		}
+		printResult(result, channel_name);
 	
-	} catch (std::runtime_error e) {
-		
+	} catch (std::runtime_error e) {	
 		cerr << "exception: " << e.what() << endl;
 		return -1;
-	
 	}
 
 	return 0;
