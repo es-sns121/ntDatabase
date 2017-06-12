@@ -6,13 +6,13 @@
  * 	
  * 	ntDatabaseMain.cpp
  *
- * 	Main source file of normative type database test 
+ * 	Main source file of normative type database demo 
  * 	program. The programs purpose is to instantiate
  * 	and host a record containing each normative type
  * 	pv structure on an EPICS v4 database. There will be 
  *  one pvRecord for each normative type. The records'
- *  functionalities will then be "tested" as they will be 
- *  written to and read from over the network from a 
+ *  functionalities will then be demonstrated as they will 
+ *  be written to and read from over the network from a 
  *  client program (ntDatabaseClient.cpp).
  *
  *	============================================================
@@ -42,22 +42,24 @@ int main (int argc, char **argv)
 	bool verbosity(false);
 
 	if (argc > 1 && argv[1]) {
-		if (string(argv[1]) == string("-v")) {
+		string argv1(argv[1]);	
+		if (argv1 == string("-v")) {
 			verbosity = true;
-		} else if (string(argv[1]) == string("-h")) {
+		} else if (argv1 == string("-h")) {
 			// print help info
 			cout << "Help -- executable flags" << endl
 				 << "\t -v (verbose. prints database record names.)\n"
 				 << "\t -h (help. prints help information)\n";
-				 return 1;
+				 return 0;
 		} else {
-			cout << "unrecognized flag: " << string(argv[1]) << " (use -h for help)." << endl;
-			return 1;
+			cout << "unrecognized flag: \"" << argv1 << "\" (use -h for help)." << endl;
+			return 0;
 		}
 	}
 	
 	// Get the master database maintained by the local channel provider.
 	PVDatabasePtr master = PVDatabase::getMaster();
+	
 	// Get the local channel provider.
 	ChannelProviderLocalPtr cpLocal = getChannelProviderLocal();
 
@@ -68,9 +70,10 @@ int main (int argc, char **argv)
 	ServerContext::shared_pointer pvaServer =
 		startPVAServer("local", 0, true, true);
 	
+	// print the record names currently hosted in the database
 	if (verbosity) {
-		// print the record names currently hosted in the database
 		shared_vector<const string> record_names = master->getRecordNames()->view();
+		
 		cout << "Records currently hosted:\n";
 		for (size_t i = 0; i < record_names.size(); i++) {
 			cout << "\t" << record_names[i] << endl;
