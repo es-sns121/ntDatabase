@@ -13,7 +13,7 @@
  *
  *	The most used scalar values are strings, shorts, long ints, and doubles. 
  *	So we will be writing to and reading from these scalar normative type records. 
- *	We will also be "testing" for data consistency by comparing the written 
+ *	We will also be "demoing" for data consistency by comparing the written 
  *	and read information to demonstrate how to read and write from the records.
  *
  * 	NOTE: for the sake of brevity, normative type will henceforth be referred to 
@@ -28,8 +28,8 @@
 #include <time.h>
 #include <vector>
 
-#include "ntTest.h"
-#include "ntScalarTest.h"
+#include "ntDemo.h"
+#include "ntScalarDemo.h"
 
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
@@ -42,9 +42,9 @@ using namespace epics::pvaClient;
 
 void printResult(const bool &result, const string &channel_name) {
 	if (result) {
-		cout << channel_name << " record test successful\n";
+		cout << channel_name << " record demo successful\n";
 	} else {
-		cout << channel_name << " record test unsuccessful\n";
+		cout << channel_name << " record demo unsuccessful\n";
 	}
 
 	return;
@@ -65,7 +65,7 @@ int main (int argc, char **argv)
 		} else if (arg == "-h") {
 			
 			cout << "Help -- executable flags\n"
-			     << "\t-v (vebose. prints test information)\n"
+			     << "\t-v (vebose. prints demo information)\n"
 				 << "\t-d (debug. prints debug information)\n"
 				 << "\t-h (help. prints help information)\n";
 			return 0;
@@ -85,7 +85,7 @@ int main (int argc, char **argv)
 	
 	cout << "ntDatabase Client\n";
 	string types[] = {"string", "short", "int", "long", "double"};
-	int test_num = 5;
+	int demo_num = 5;
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");
@@ -93,20 +93,20 @@ int main (int argc, char **argv)
 		cout << "debug : " << (debug ? "true" : "false") << endl;
 		if (debug) PvaClient::setDebug(true);
 		
-		// seed rand for the generator functions in the test code.
+		// seed rand for the generator functions in the demo code.
 		srand(time(NULL));
 
 		bool result(false);
 		string channel_name;
 
-		// Test the scalar and scalar array nt records.
-		for (int i = 0; i < test_num; ++i) {
+		// Demo the scalar and scalar array nt records.
+		for (int i = 0; i < demo_num; ++i) {
 			channel_name = types[i];
-			result = testScalarRecord(verbosity, pvaClient, channel_name, types[i]);
+			result = demoScalarRecord(verbosity, pvaClient, channel_name, types[i]);
 			printResult(result, channel_name);
 
 			channel_name += "Array";
-			result = testScalarRecord(verbosity, pvaClient, channel_name, types[i]);
+			result = demoScalarRecord(verbosity, pvaClient, channel_name, types[i]);
 			printResult(result, channel_name);
 
 			result = false;
@@ -114,42 +114,42 @@ int main (int argc, char **argv)
 		}
 		
 		/* =============================================================
-				Test the more specific nt records.	
+				Demo the more specific nt records.	
 		*/
 
 		/* NTEnum */
 		channel_name = "enum";
-		result = testEnum(verbosity, pvaClient, channel_name);	
+		result = demoEnum(verbosity, pvaClient, channel_name);	
 		printResult(result, channel_name);
 
 		/* NTMatrix */
 		channel_name = "matrix";
-		result = testMatrix(verbosity, pvaClient, channel_name);	
+		result = demoMatrix(verbosity, pvaClient, channel_name);	
 		printResult(result, channel_name);
 		
 		/* NTURI (Uniform Resouce Identifier) */ 
 		channel_name = "uri";
-		result = testURI(verbosity, pvaClient, channel_name);	
+		result = demoURI(verbosity, pvaClient, channel_name);	
 		printResult(result, channel_name);
 		
 		/* NTNameValue */
 		channel_name = "name_value";
-		result = testNameValue(verbosity, pvaClient, channel_name);	
+		result = demoNameValue(verbosity, pvaClient, channel_name);	
 		printResult(result, channel_name);
 		
 		/* NTTable */
 		channel_name = "table";
-		result = testTable(verbosity, pvaClient, channel_name);	
+		result = demoTable(verbosity, pvaClient, channel_name);	
 		printResult(result, channel_name);
 	
 		/* NTAttribute */
 		channel_name = "attribute";
-		result = testAttribute(verbosity, pvaClient, channel_name);	
+		result = demoAttribute(verbosity, pvaClient, channel_name);	
 		printResult(result, channel_name);
 
 		/* NTMultiChannel */
 		channel_name = "multi_channel";
-		result = testMultiChannel(verbosity, pvaClient, channel_name);	
+		result = demoMultiChannel(verbosity, pvaClient, channel_name);	
 		printResult(result, channel_name);
 	
 	} catch (std::runtime_error e) {	
