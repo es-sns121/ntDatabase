@@ -77,14 +77,15 @@ static void createScalarRecords(
 		addTimeStamp()->
 		createPVStructure();
 
-	// Create the record and attempty to add it to the database.	
+	// Create the record and attempt to add it to the database.	
 	PVRecordPtr pvRecord = PVRecord::create(recordName, pvStructure);
 	
 	bool result = master->addRecord(pvRecord);
 	if (!result) cerr << "Failed to add record " << recordName << " to database\n";
 
 	recordName += "Array";
-
+	
+	// Create the pvStructure for the array type to be inserted into the record.
 	NTScalarArrayBuilderPtr ntScalarArrayBuilder = NTScalarArray::createBuilder();
 	pvStructure = ntScalarArrayBuilder->
 		value(scalarType)->
@@ -125,11 +126,14 @@ void NTDatabase::create()
 		addAlarm()->
 		addTimeStamp()->
 		createPVStructure();
+	// Create the choices vector for the enum.
 	shared_vector<string> choices(2);
 	choices[0] = "zero";
 	choices[1] = "one";
+	// Get the structure's array and replace it with the newly created vector.
 	PVStringArrayPtr pvChoices = pvStructure->getSubField<PVStringArray>("value.choices");
 	pvChoices->replace(freeze(choices));
+	
 	result = master->addRecord(PVRecord::create("enum", pvStructure));
 	if (!result) cerr << "Failed to add enum record\n";
 
