@@ -66,7 +66,7 @@ bool testEnum(
 	
 	stringstream out;
 	
-	out << "\n\tBefore write: enum(one, zero) = " << choices[read] << endl;
+	out << "\n\tBefore write: enum(zero, one) = " << choices[read] << endl;
 	
 	
 	// Write a new index to the record.
@@ -79,7 +79,7 @@ bool testEnum(
 	pvStructure = getData->getPVStructure();
 	read = pvStructure->getSubField<PVInt>("value.index")->get();
 
-	out << "\tAfter write: enum(one, zero) = " << choices[read] << endl << endl;
+	out << "\t After write: enum(zero, one) = " << choices[read] << endl << endl;
 
 	if (read == write)
 		result = true;
