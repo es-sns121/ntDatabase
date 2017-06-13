@@ -28,7 +28,7 @@
  * ========================================================================================
  */
 
-#include "ntTest.h"
+#include "ntDemo.h"
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
 #include <pv/pvData.h>
@@ -39,6 +39,60 @@ using namespace std;
 using namespace epics::pvData;
 using namespace epics::pvAccess;
 using namespace epics::pvaClient;
+
+void printResult(const bool &result, const string &channel_name) {
+	if (result) {
+		cout << channel_name << " record demo successful\n";
+	} else {
+		cout << channel_name << " record demo unsuccessful\n";
+	}
+
+	return;
+}
+
+int demoRecord(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name)
+{
+	bool result(false);
+	
+	static bool first_call = true;
+
+	static map<string, bool (*) (bool, PvaClientPtr const &, string const &)> functions;
+	
+	map<string, bool (*) (bool, PvaClientPtr const &, string const &)>::iterator it;
+
+	if (true == first_call) {
+		
+		first_call = false;
+		
+		functions["enum"] = &demoEnum;
+		functions["matrix"] = &demoMatrix;
+		functions["uri"] = &demoURI;
+		functions["name_value"] = &demoNameValue;
+		functions["table"] = &demoTable;
+		functions["attribute"] = &demoAttribute;
+		functions["multi_channel"] = &demoMultiChannel;
+	}
+
+	it = functions.find(channel_name);
+	
+	if (functions.end() == it) {
+		
+		cerr << "Channel '" << channel_name << "' not recognised.\n";
+		return 1;
+	
+	} else {	
+	
+		result = (it->second)(verbosity, pva, channel_name);
+		printResult(result, channel_name);
+	
+	}
+
+	return 0;
+
+}
 
 bool demoEnum(
 	bool verbosity,

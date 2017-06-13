@@ -42,6 +42,13 @@ using namespace epics::pvData;
 using namespace epics::pvAccess;
 using namespace epics::pvaClient;
 
+void printResult(const bool &result, const string &channel_name);
+
+int demoRecord(
+	bool verbosity,
+	PvaClientPtr const & pva,
+	string const & channel_name);
+
 bool demoEnum(
 	bool verbosity,
 	PvaClientPtr const & pva,

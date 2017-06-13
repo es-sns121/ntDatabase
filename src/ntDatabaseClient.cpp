@@ -40,15 +40,6 @@ using namespace epics::pvData;
 using namespace epics::pvAccess;
 using namespace epics::pvaClient;
 
-void printResult(const bool &result, const string &channel_name) {
-	if (result) {
-		cout << channel_name << " record demo successful\n";
-	} else {
-		cout << channel_name << " record demo unsuccessful\n";
-	}
-
-	return;
-}
 
 int main (int argc, char **argv)
 {
@@ -115,43 +106,33 @@ int main (int argc, char **argv)
 				Demo the more specific nt records.	
 		*/
 
-		// TODO: Wrap the result, function call, and printResult in a function that
-		// uses the map function pointer look up method.
-
 		/* NTEnum */
 		channel_name = "enum";
-		result = demoEnum(verbosity, pvaClient, channel_name);	
-		printResult(result, channel_name);
+		demoRecord(verbosity, pvaClient, channel_name);	
 
 		/* NTMatrix */
 		channel_name = "matrix";
-		result = demoMatrix(verbosity, pvaClient, channel_name);	
-		printResult(result, channel_name);
+		demoRecord(verbosity, pvaClient, channel_name);	
 		
 		/* NTURI (Uniform Resouce Identifier) */ 
 		channel_name = "uri";
-		result = demoURI(verbosity, pvaClient, channel_name);	
-		printResult(result, channel_name);
+		demoRecord(verbosity, pvaClient, channel_name);	
 		
 		/* NTNameValue */
 		channel_name = "name_value";
-		result = demoNameValue(verbosity, pvaClient, channel_name);	
-		printResult(result, channel_name);
+		demoRecord(verbosity, pvaClient, channel_name);	
 		
 		/* NTTable */
 		channel_name = "table";
-		result = demoTable(verbosity, pvaClient, channel_name);	
-		printResult(result, channel_name);
+		demoRecord(verbosity, pvaClient, channel_name);	
 	
 		/* NTAttribute */
 		channel_name = "attribute";
-		result = demoAttribute(verbosity, pvaClient, channel_name);	
-		printResult(result, channel_name);
+		demoRecord(verbosity, pvaClient, channel_name);	
 
 		/* NTMultiChannel */
 		channel_name = "multi_channel";
-		result = demoMultiChannel(verbosity, pvaClient, channel_name);	
-		printResult(result, channel_name);
+		demoRecord(verbosity, pvaClient, channel_name);	
 	
 	} catch (std::runtime_error e) {	
 		cerr << "exception: " << e.what() << endl;
