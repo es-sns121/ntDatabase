@@ -29,6 +29,7 @@
  */
 
 #include "ntDemo.h"
+#include "ntScalarDemo.h"
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
 #include <pv/pvData.h>
@@ -66,7 +67,11 @@ int demoRecord(
 	if (true == first_call) {
 		
 		first_call = false;
-		
+		functions["string"] = &demoString;
+		functions["short"] = &demoShort;
+		functions["int"] = &demoInt;
+		functions["long"] = &demoLong;
+		functions["double"] = &demoDouble;
 		functions["enum"] = &demoEnum;
 		functions["matrix"] = &demoMatrix;
 		functions["uri"] = &demoURI;

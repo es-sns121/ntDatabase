@@ -13,8 +13,6 @@
 
 #include "ntScalarDemo.h"
 
-bool verbosity_flag;
-
 // Crappy method of generating a random integer.
 long genInt(long high) {
 	return rand() % high;
@@ -40,6 +38,7 @@ string genString() {
 }
 
 bool demoString(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -67,7 +66,7 @@ bool demoString(
 
 	read_str = getData->getString();
 
-	if(verbosity_flag)
+	if(verbosity)
 	{
 		cout << setw(20) << "Write string: " << write_str << "\n";
 		cout << setw(20) << "Read string: " << read_str << "\n\n";
@@ -76,10 +75,11 @@ bool demoString(
 	if (write_str.compare(read_str) != 0)
 		result = false;
 		
-	return (result && demoStringArray(pva, string(channel_name + "Array")));
+	return (result && demoStringArray(verbosity, pva, string(channel_name + "Array")));
 }
 
 bool demoStringArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -119,7 +119,7 @@ bool demoStringArray(
 	for (int i = 0; i < numstr; ++i) 
 	{
 
-		if(verbosity_flag)
+		if(verbosity)
 		{
 			cout << setw(20) << "Write string: " << data[i] << "\n";
 			cout << setw(20) << "Read string: " << read_str[i] << "\n\n";
@@ -133,6 +133,7 @@ bool demoStringArray(
 }
 
 bool demoShort(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -155,7 +156,7 @@ bool demoShort(
 
 	short read = getData->getPVStructure()->getSubField<PVShort>("value")->get();
 
-	if(verbosity_flag)
+	if(verbosity)
 	{
 		cout << setw(20) << "Write Short: " << write << "\n";
 		cout << setw(20) << "Read Short: " << read << "\n\n";
@@ -164,11 +165,12 @@ bool demoShort(
 	if (write == read)
 		result = true;
 
-	return (result && demoShortArray(pva, string(channel_name + "Array")));
+	return (result && demoShortArray(verbosity, pva, string(channel_name + "Array")));
 
 }
 
 bool demoShortArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -202,7 +204,7 @@ bool demoShortArray(
 	
 	for (int i = 0; i < num; ++i) 
 	{
-		if(verbosity_flag)
+		if(verbosity)
 		{
 			cout << setw(20) << "Write Short: " << write[i] << "\n";
 			cout << setw(20) << "Read Short: " << read[i] << "\n\n";
@@ -216,6 +218,7 @@ bool demoShortArray(
 }
 
 bool demoInt(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -238,7 +241,7 @@ bool demoInt(
 
 	int read = getData->getPVStructure()->getSubField<PVInt>("value")->get();
 
-	if(verbosity_flag)
+	if(verbosity)
 	{
 		cout << setw(20) << "Write Int: " << write << "\n";
 		cout << setw(20) << "Read Int: " << read << "\n\n";
@@ -246,11 +249,12 @@ bool demoInt(
 	if (write == read)
 		result = true;
 
-	return (result && demoIntArray(pva, string(channel_name + "Array")));
+	return (result && demoIntArray(verbosity, pva, string(channel_name + "Array")));
 
 }
 
 bool demoIntArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -285,7 +289,7 @@ bool demoIntArray(
 	for (int i = 0; i < num; ++i) 
 	{
 		
-		if(verbosity_flag)
+		if(verbosity)
 		{
 			cout << setw(20) << "Write Int: " << write[i] << "\n";
 			cout << setw(20) << "Read Int: " << read[i] << "\n\n";
@@ -299,6 +303,7 @@ bool demoIntArray(
 }
 
 bool demoLong(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -322,7 +327,7 @@ bool demoLong(
 
 	long read = getData->getPVStructure()->getSubField<PVLong>("value")->get();
 	
-	if(verbosity_flag)
+	if(verbosity)
 	{
 		cout << setw(20) << "Write Long: " << write << "\n";
 		cout << setw(20) << "Read Long: " << read << "\n\n";
@@ -330,11 +335,12 @@ bool demoLong(
 	if (write == read)
 		result = true;
 
-	return (result && demoLongArray(pva, string(channel_name + "Array")));
+	return (result && demoLongArray(verbosity, pva, string(channel_name + "Array")));
 
 }
 
 bool demoLongArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -370,7 +376,7 @@ bool demoLongArray(
 	
 	for (int i = 0; i < num; ++i) 
 	{	
-		if(verbosity_flag)
+		if(verbosity)
 		{
 			cout << setw(20) << "Write Long: " << write[i] << "\n";
 			cout << setw(20) << "Read Long: " << read[i] << "\n\n";
@@ -390,6 +396,7 @@ double genDouble()
 }
 
 bool demoDouble(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -415,7 +422,7 @@ bool demoDouble(
 
 	read = getData->getDouble();
 
-	if(verbosity_flag)
+	if(verbosity)
 	{
 		cout << "\n" << setw(20) << "Write double: " << write << "\n";
 		cout << setw(20) << "Read double: " << read << "\n\n";
@@ -424,10 +431,11 @@ bool demoDouble(
 	if (write != read)
 		return false;
 	
-	return (true && demoDoubleArray(pva, string(channel_name + "Array")));
+	return (true && demoDoubleArray(verbosity, pva, string(channel_name + "Array")));
 }
 
 bool demoDoubleArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name)
 {
@@ -465,7 +473,7 @@ bool demoDoubleArray(
 	for (int i = 0; i < num; ++i) 
 	{
 
-		if(verbosity_flag)
+		if(verbosity)
 		{
 			cout << setw(20) << "Write double: " << write[i] << "\n";
 			cout << setw(20) << "Read double: " << read[i] << "\n\n";
@@ -477,36 +485,3 @@ bool demoDoubleArray(
 			
 	return true;
 }
-
-// Parse the record request and call the respective function.
-bool demoScalarRecord(
-	bool const &verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
-{
-	verbosity_flag = verbosity;
-
-	map<string, bool (*) (const epics::pvaClient::PvaClientPtr&, const string&)>::iterator it;
-
-	map<string, bool (*) (const epics::pvaClient::PvaClientPtr&, const string&)> functions;
-	
-	functions["string"] = &demoString;
-	functions["short"] = &demoShort;
-	functions["int"] = &demoInt;
-	functions["long"] = &demoLong;
-	functions["double"] = &demoDouble;
-
-	bool result(false);
-	
-	it = functions.find(channel_name);
-	
-	if (it == functions.end()) {
-		cerr << "Record type '" << channel_name << "' not recognized.\n";
-		result = false;
-	} else {
-		result = (it->second)(pva, channel_name);
-	}
-
-	return result;
-}
-

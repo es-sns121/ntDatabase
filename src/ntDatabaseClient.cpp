@@ -52,7 +52,8 @@ int main (int argc, char **argv)
 		if (arg == "-v") {
 		
 			verbosity = true;		
-		
+	
+	/* Help flag */
 		} else if (arg == "-h") {
 			
 			cout << "Help -- executable flags -- only one accepted at a time\n"
@@ -60,11 +61,13 @@ int main (int argc, char **argv)
 				 << "\t-d (debug. prints debug information)\n"
 				 << "\t-h (help. prints help information)\n";
 			return 0;
-		
+	
+	/* Debuf flag */
 		} else if (arg == "-d") {
 		
 			debug = true;
 		
+	/* Error */
 		} else {
 			
 			cout << "Unrecognized option: '" << arg
@@ -75,8 +78,10 @@ int main (int argc, char **argv)
 	}
 	
 	cout << "ntDatabase Client\n";
+	
 	string types[] = {"string", "short", "int", "long", "double"};
-	int demo_num = 5;
+	int types_num = 5;
+	
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");
@@ -90,13 +95,12 @@ int main (int argc, char **argv)
 		bool result(false);
 		string channel_name;
 
-		// TODO: Find a poymorphic way of doing this.
+		// TODO: Find a polymorphic way of doing this.
 
 		// Demo the scalar and scalar array nt records.
-		for (int i = 0; i < demo_num; ++i) {
+		for (int i = 0; i < types_num; ++i) {
 			channel_name = types[i];
-			result = demoScalarRecord(verbosity, pvaClient, channel_name);
-			printResult(result, channel_name);
+			demoRecord(verbosity, pvaClient, channel_name);
 
 			result = false;
 			channel_name.clear();

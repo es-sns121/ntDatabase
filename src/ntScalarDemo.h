@@ -38,10 +38,12 @@ using namespace epics::pvaClient;
 string genString();
 
 bool demoString(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
 bool demoStringArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
@@ -49,26 +51,32 @@ bool demoStringArray(
 long genInt(long high);
 
 bool demoShort(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
 bool demoShortArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
 bool demoInt(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
 bool demoIntArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
 bool demoLong(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
 bool demoLongArray(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
@@ -76,15 +84,12 @@ bool demoLongArray(
 double genDouble();
 
 bool demoDouble(
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
 bool demoDoubleArray(
-	PvaClientPtr const &pva,
-	string const &channel_name);
-
-bool demoScalarRecord(
-	bool const &verbosity,
+	bool verbosity,
 	PvaClientPtr const &pva,
 	string const &channel_name);
 
