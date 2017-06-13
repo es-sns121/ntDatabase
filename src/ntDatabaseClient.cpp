@@ -64,8 +64,8 @@ int main (int argc, char **argv)
 		
 		} else if (arg == "-h") {
 			
-			cout << "Help -- executable flags\n"
-			     << "\t-v (vebose. prints demo information)\n"
+			cout << "Help -- executable flags -- only one accepted at a time\n"
+			     << "\t-v (verbose. prints demo ouput. Recommend redirecting to a file.)\n"
 				 << "\t-d (debug. prints debug information)\n"
 				 << "\t-h (help. prints help information)\n";
 			return 0;
