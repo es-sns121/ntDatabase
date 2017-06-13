@@ -62,7 +62,7 @@ int main (int argc, char **argv)
 				 << "\t-h (help. prints help information)\n";
 			return 0;
 	
-	/* Debuf flag */
+	/* Debug flag */
 		} else if (arg == "-d") {
 		
 			debug = true;

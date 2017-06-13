@@ -324,7 +324,8 @@ bool demoLong(
 
 	putData->getPVStructure()->getSubField<PVLong>("value")->put(write);
 	putGet->putGet();
-
+	
+	putGet->getGetData();
 	long read = getData->getPVStructure()->getSubField<PVLong>("value")->get();
 	
 	if(verbosity)
@@ -370,6 +371,8 @@ bool demoLongArray(
 	putData->getPVStructure()->getSubField<PVLongArray>("value")->replace(write);
 	putGet->putGet();
 
+	putGet->getGetData();
+	
 	// Read the data stored in the record.
 	shared_vector<const long> read;
 	read = getData->getPVStructure()->getSubField<PVLongArray>("value")->view();
