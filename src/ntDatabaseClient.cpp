@@ -79,64 +79,40 @@ int main (int argc, char **argv)
 	
 	cout << "ntDatabase Client\n";
 	
-	string types[] = {"string", "short", "int", "long", "double"};
-	int types_num = 5;
+	string record_types[] = {
+					  "string", "short", "int", "long", "double",      // Scalar nt examples.
+					  
+					  "enum", "matrix", "uri", "name_value", "table",  // More specific nt examples
+					  "attribute", "multi_channel"};                 
+	
+	int number_of_record_types = 12;
 	
 	try {
 	
 		PvaClientPtr pvaClient = PvaClient::get("pva");
 		
 		cout << "debug : " << (debug ? "true" : "false") << endl;
+		
 		if (debug) PvaClient::setDebug(true);
 		
 		// seed rand for the generator functions in the demo code.
 		srand(time(NULL));
 
 		bool result(false);
+		
 		string channel_name;
 
-		// TODO: Find a polymorphic way of doing this.
-
-		// Demo the scalar and scalar array nt records.
-		for (int i = 0; i < types_num; ++i) {
-			channel_name = types[i];
+		// Demo the nt records.
+		for (int i = 0; i < number_of_record_types; ++i) {
+			
+			channel_name = record_types[i];
+			
 			demoRecord(verbosity, pvaClient, channel_name);
 
 			result = false;
+			
 			channel_name.clear();
 		}
-		
-		/* =============================================================
-				Demo the more specific nt records.	
-		*/
-
-		/* NTEnum */
-		channel_name = "enum";
-		demoRecord(verbosity, pvaClient, channel_name);	
-
-		/* NTMatrix */
-		channel_name = "matrix";
-		demoRecord(verbosity, pvaClient, channel_name);	
-		
-		/* NTURI (Uniform Resouce Identifier) */ 
-		channel_name = "uri";
-		demoRecord(verbosity, pvaClient, channel_name);	
-		
-		/* NTNameValue */
-		channel_name = "name_value";
-		demoRecord(verbosity, pvaClient, channel_name);	
-		
-		/* NTTable */
-		channel_name = "table";
-		demoRecord(verbosity, pvaClient, channel_name);	
-	
-		/* NTAttribute */
-		channel_name = "attribute";
-		demoRecord(verbosity, pvaClient, channel_name);	
-
-		/* NTMultiChannel */
-		channel_name = "multi_channel";
-		demoRecord(verbosity, pvaClient, channel_name);	
 	
 	} catch (std::runtime_error e) {	
 		cerr << "exception: " << e.what() << endl;

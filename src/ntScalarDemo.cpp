@@ -424,8 +424,8 @@ bool demoDouble(
 
 	if(verbosity)
 	{
-		cout << "\n" << setw(20) << "Write double: " << write << "\n";
-		cout << setw(20) << "Read double: " << read << "\n\n";
+		cout << "\n" << setw(20) << "Write double: " << write;
+		cout << "\n" << setw(20) << "Read double: " << read << "\n\n";
 	}
 
 	if (write != read)
@@ -445,11 +445,11 @@ bool demoDoubleArray(
 	else
 		return false;
 	
-	// Write the string to the record.
+	// Write the double to the record.
 	
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
-	// Number of strings in array is between 20 and 30
+	// Number of doubles in array is between 20 and 30
 	int num = (rand()%10) + 20;
 	
 	shared_vector<double> data(num);
@@ -457,10 +457,9 @@ bool demoDoubleArray(
 	for (int i = 0; i < num; ++i) 
 		data[i] = genDouble();
 	
-	// NOTE: when freeze is executed, all data from write_str is removed.
 	shared_vector<const double> write(freeze(data));
-	// write_str is now empty.
-	
+	// data is now empty
+
 	putData->putDoubleArray(write);
 	putGet->putGet();
 
