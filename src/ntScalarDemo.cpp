@@ -48,7 +48,9 @@ bool demoString(
 	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
-	
+
+	bool result(true);
+
 	string write_str = genString();
 
 	// Write the string to the record.
@@ -72,9 +74,9 @@ bool demoString(
 	}
 
 	if (write_str.compare(read_str) != 0)
-		return false;
+		result = false;
 		
-	return true;
+	return (result && demoStringArray(pva, string(channel_name + "Array")));
 }
 
 bool demoStringArray(
@@ -86,7 +88,9 @@ bool demoStringArray(
 	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
-	
+
+	bool result(true);
+
 	// Write the string to the record.
 	
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -122,10 +126,10 @@ bool demoStringArray(
 		}
 
 		if (data[i] != read_str[i])
-			return false;
+			result = false;
 	}
 			
-	return true;
+	return result;
 }
 
 bool demoShort(
@@ -160,7 +164,7 @@ bool demoShort(
 	if (write == read)
 		result = true;
 
-	return result;
+	return (result && demoShortArray(pva, string(channel_name + "Array")));
 
 }
 
@@ -242,7 +246,7 @@ bool demoInt(
 	if (write == read)
 		result = true;
 
-	return result;
+	return (result && demoIntArray(pva, string(channel_name + "Array")));
 
 }
 
@@ -326,7 +330,7 @@ bool demoLong(
 	if (write == read)
 		result = true;
 
-	return result;
+	return (result && demoLongArray(pva, string(channel_name + "Array")));
 
 }
 
@@ -339,7 +343,9 @@ bool demoLongArray(
 	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
 		return false;
-	
+
+	bool result(true);
+
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
@@ -370,10 +376,11 @@ bool demoLongArray(
 			cout << setw(20) << "Read Long: " << read[i] << "\n\n";
 		}
 		if (write[i] != read[i])
-			return false;
+			result = false;
 	}
 			
-	return true;
+	
+	return result;
 }
 
 double genDouble() 
@@ -416,8 +423,8 @@ bool demoDouble(
 
 	if (write != read)
 		return false;
-		
-	return true;
+	
+	return (true && demoDoubleArray(pva, string(channel_name + "Array")));
 }
 
 bool demoDoubleArray(
@@ -471,66 +478,33 @@ bool demoDoubleArray(
 	return true;
 }
 
-// This is hideous. Creating a map of recordType/demoFunction key value pairs, and then
-// just searching for the function would be better.
 // Parse the record request and call the respective function.
 bool demoScalarRecord(
 	bool const &verbosity,
 	PvaClientPtr const &pva,
-	string const &channel_name,
-	string const &record_type)
+	string const &channel_name)
 {
 	verbosity_flag = verbosity;
 
+	map<string, bool (*) (const epics::pvaClient::PvaClientPtr&, const string&)>::iterator it;
+
+	map<string, bool (*) (const epics::pvaClient::PvaClientPtr&, const string&)> functions;
+	
+	functions["string"] = &demoString;
+	functions["short"] = &demoShort;
+	functions["int"] = &demoInt;
+	functions["long"] = &demoLong;
+	functions["double"] = &demoDouble;
+
 	bool result(false);
-	if (record_type == "string") {
-		if (channel_name == "string")
-			result = demoString(pva, channel_name);	
-		else if (channel_name == "stringArray")
-			result = demoStringArray(pva, channel_name);
-		else {
-			cerr << "Channel name " << channel_name << " not recognized.\n";
-			return false;
-		}
-	} else if (record_type == "short") {
-		if (channel_name == "short")
-			result = demoShort(pva, channel_name);	
-		else if (channel_name == "shortArray")
-			result = demoShortArray(pva, channel_name);
-		else {
-			cerr << "Channel name " << channel_name << " not recognized.\n";
-			return false;
-		}		
-	} else if (record_type == "int") {
-		if (channel_name == "int")
-			result = demoInt(pva, channel_name);	
-		else if (channel_name == "intArray")
-			result = demoIntArray(pva, channel_name);
-		else {
-			cerr << "Channel name " << channel_name << " not recognized.\n";
-			return false;
-		}
-	} else if (record_type == "long") {
-		if (channel_name == "long")
-			result = demoLong(pva, channel_name);	
-		else if (channel_name == "longArray")
-			result = demoLongArray(pva, channel_name);
-		else {
-			cerr << "Channel name " << channel_name << " not recognized.\n";
-			return false;
-		}	
-	} else if (record_type == "double") {
-		if (channel_name == "double")
-			result = demoDouble(pva, channel_name);	
-		else if (channel_name == "doubleArray")
-			result = demoDoubleArray(pva, channel_name);
-		else {
-			cerr << "Channel name " << channel_name << " not recognized.\n";
-			return false;
-		}		
+	
+	it = functions.find(channel_name);
+	
+	if (it == functions.end()) {
+		cerr << "Record type '" << channel_name << "' not recognized.\n";
+		result = false;
 	} else {
-		cerr << "Record type " << record_type << " not recognized.\n";
-		return false;
+		result = (it->second)(pva, channel_name);
 	}
 
 	return result;

@@ -99,14 +99,12 @@ int main (int argc, char **argv)
 		bool result(false);
 		string channel_name;
 
+		// TODO: Find a poymorphic way of doing this.
+
 		// Demo the scalar and scalar array nt records.
 		for (int i = 0; i < demo_num; ++i) {
 			channel_name = types[i];
-			result = demoScalarRecord(verbosity, pvaClient, channel_name, types[i]);
-			printResult(result, channel_name);
-
-			channel_name += "Array";
-			result = demoScalarRecord(verbosity, pvaClient, channel_name, types[i]);
+			result = demoScalarRecord(verbosity, pvaClient, channel_name);
 			printResult(result, channel_name);
 
 			result = false;
@@ -116,6 +114,9 @@ int main (int argc, char **argv)
 		/* =============================================================
 				Demo the more specific nt records.	
 		*/
+
+		// TODO: Wrap the result, function call, and printResult in a function that
+		// uses the map function pointer look up method.
 
 		/* NTEnum */
 		channel_name = "enum";

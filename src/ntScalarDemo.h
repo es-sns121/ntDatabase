@@ -1,5 +1,5 @@
-#ifndef NTSCALARTEST_H
-#define NTSCALARTEST_H
+#ifndef NTSCALARDEMO_H
+#define NTSCALARDEMO_H
 
 /*
  * ==========================================================
@@ -12,18 +12,17 @@
  *		long
  *		double
  *		
- *	There is a corresponding demoArray function to each
+ *	There is a corresponding demo*Array function to each
  *	scalar type.
  *	
- *	The demo functions work by writing a value to the record, reading
+ *	The functions work by writing a value to the record, reading
  *	the value, and then comparing the two values to check for consistency.
- *
- *	These do not serve as intensive demos, but instead are examples to 
- *	demonstrate the functionality of the scalar normative types.
  *
  * ==========================================================
  */
 
+
+#include <map>
 #include <pv/pvAccess.h>
 #include <pv/pvaClient.h>
 #include <pv/pvData.h>
@@ -49,6 +48,14 @@ bool demoStringArray(
 // Generates a "random" integer in the range 0 to high.
 long genInt(long high);
 
+bool demoShort(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool demoShortArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
 bool demoInt(
 	PvaClientPtr const &pva,
 	string const &channel_name);
@@ -68,10 +75,17 @@ bool demoLongArray(
 // Generates a "random" floating point number.
 double genDouble();
 
+bool demoDouble(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
+bool demoDoubleArray(
+	PvaClientPtr const &pva,
+	string const &channel_name);
+
 bool demoScalarRecord(
 	bool const &verbosity,
 	PvaClientPtr const &pva,
-	string const &channel_name,
-	string const &record_type);
+	string const &channel_name);
 
-#endif /* NTSCALARTEST_H */
+#endif /* NTSCALARDEMO_H */

@@ -1,11 +1,11 @@
-#ifndef NTTEST_H
-#define NTTEST_H
+#ifndef NTDEMO_H
+#define NTDEMO_H
 
 /*
  * ==========================================================
- *	ntTest.h
+ *	ntDemo.h
  *
- *	Header file for normative type demo and demonstration functions.
+ *	Header file for normative type demonstration functions.
  *	
  *	These functions demo the operation of some normative types:
  *		NTEnum   (enumerated)
@@ -17,17 +17,14 @@
  *      NTMultiChannel (Aggregate structure of multiple channel
  *      			    names and values)
  *
- * 		These do not serve as intensive demos, but instead aim
- * 		to demonstrate the methods of interacting with the 
- * 		records and to demonstrate the functionality of the 
+ * 		These functions aim to demonstrate the methods of interacting 
+ * 		with the records and to demonstrate the functionality of the 
  * 		normative types.
  * 		
  * 		The methods of demoing vary, but involve one or both of 
  * 		the following:
  * 			Writing data to the record.
  * 			Reading data from the record.
- * 		In the cases where both occur, a further demo looking
- * 		for data consistency in the writes and reads is done.
  *
  * ==========================================================
  */
@@ -80,4 +77,4 @@ bool demoMultiChannel(
 	PvaClientPtr const & pva,
 	string const & channel_name);	
 
-#endif /* NTTEST_H */
+#endif /* NTDEMO_H */
