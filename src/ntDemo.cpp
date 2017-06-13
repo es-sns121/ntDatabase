@@ -94,6 +94,7 @@ int demoRecord(
 
 }
 
+/* NTEnum demonstration */
 bool demoEnum(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -144,6 +145,7 @@ bool demoEnum(
 	return result;
 }
 
+/* NTMatrix demonstration */
 bool demoMatrix(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -214,7 +216,7 @@ bool demoMatrix(
 	return result;
 }
 
-
+/* NTURI demonstration */
 bool demoURI(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -275,6 +277,7 @@ bool demoURI(
 	return result;
 }
 
+/* NTNameValue demonstration */
 bool demoNameValue(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -338,6 +341,7 @@ bool demoNameValue(
 	return result;
 }
 
+/* NTTable demonstration */
 bool demoTable(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -364,7 +368,7 @@ bool demoTable(
 	data.push_back("Whats the answer to the ultimate question of life, the universe, and everything?");
 	shared_vector<const string> questions(freeze(data));
 	
-	// Create the answer vector.
+	// Create the answers vector.
 	data.push_back("42");
 	shared_vector<const string> answers(freeze(data));
 	
@@ -426,6 +430,7 @@ bool demoTable(
 	return result;
 }
 
+/* NTAttribute demonstration */
 bool demoAttribute(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -473,8 +478,7 @@ bool demoAttribute(
 	return result;
 }
 
-// There's no demoing going on here. This would be better thought of as a 
-// multi channel demonstration.
+/* NTMultiChannel Demo */
 bool demoMultiChannel(
 	bool verbosity,
 	PvaClientPtr const & pva,

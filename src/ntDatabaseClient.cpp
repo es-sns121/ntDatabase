@@ -46,7 +46,7 @@ int main (int argc, char **argv)
 	bool verbosity(false);
 	bool debug(false);
 	
-	// Handle program flags.
+	// Handle executable flag.
 	if (argc > 1 && argv[1] != NULL) {
 		string arg(argv[1]);
 		if (arg == "-v") {

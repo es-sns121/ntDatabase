@@ -47,7 +47,7 @@ int main (int argc, char **argv)
 			verbosity = true;
 		} else if (argv1 == string("-h")) {
 			// print help info
-			cout << "Help -- executable flags" << endl
+			cout << "Help -- executable flags -- only one accepted at a time" << endl
 				 << "\t -v (verbose. prints database record names.)\n"
 				 << "\t -h (help. prints help information)\n";
 				 return 0;
