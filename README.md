@@ -1,4 +1,4 @@
-# database
+# ntDatabase
 
 This example provides an EPICS V4 database that hosts EPICS V4 PVRecords. 
 The records hold normative type pvData structures.
