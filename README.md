@@ -56,11 +56,13 @@ Code for a client program that uses pvaClient to access the records
 hosted on the database.
 
 * ntScalarDemo.h
+
 * ntScalarDemo.cpp
 Code that demonstrates the functionality of the scalar normative types
 and provides examples on operating on them.
 
 * ntDemo.h
+
 * ntDemo.cpp
 Code that demonstrates the functionality of the non-scalar normative types
 and provides examples on operating on them.
