@@ -98,8 +98,6 @@ int main (int argc, char **argv)
 		// seed rand for the generator functions in the demo code.
 		srand(time(NULL));
 
-		bool result(false);
-		
 		string channel_name;
 
 		// Demo the nt records.
@@ -109,8 +107,6 @@ int main (int argc, char **argv)
 			
 			demoRecord(verbosity, pvaClient, channel_name);
 
-			result = false;
-			
 			channel_name.clear();
 		}
 	
