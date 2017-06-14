@@ -42,18 +42,25 @@ int main (int argc, char **argv)
 	bool verbosity(false);
 
 	if (argc > 1 && argv[1]) {
-		string argv1(argv[1]);	
-		if (argv1 == string("-v")) {
+		
+		string arg(argv[1]);	
+		
+		if (arg == string("-v")) {
+		/* Verbose flag */
 			verbosity = true;
-		} else if (argv1 == string("-h")) {
-			// print help info
+		
+		} else if (arg == string("-h")) {
+		/* Help flag */	
 			cout << "Help -- executable flags -- only one accepted at a time" << endl
 				 << "\t -v (verbose. prints database record names.)\n"
 				 << "\t -h (help. prints help information)\n";
-				 return 0;
-		} else {
-			cout << "unrecognized flag: \"" << argv1 << "\" (use -h for help)." << endl;
+		
 			return 0;
+		} else {
+		/* Error */
+			cout << "unrecognized flag: \"" << arg << "\" (use -h for help)." << endl;
+			return 0;
+		
 		}
 	}
 	

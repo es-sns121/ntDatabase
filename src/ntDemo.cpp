@@ -41,7 +41,9 @@ using namespace epics::pvData;
 using namespace epics::pvAccess;
 using namespace epics::pvaClient;
 
+/* Formatted print function for demo function results */
 void printResult(const bool &result, const string &channel_name) {
+	
 	if (result) {
 		cout << channel_name << " record demo successful\n";
 	} else {
@@ -51,6 +53,7 @@ void printResult(const bool &result, const string &channel_name) {
 	return;
 }
 
+/* Wrapper function that calls specific demo functions */
 int demoRecord(
 	bool verbosity,
 	PvaClientPtr const & pva,
@@ -60,12 +63,13 @@ int demoRecord(
 	
 	static bool first_call = true;
 
+	/* map of function pointers keyed on channel name */
 	static map<string, bool (*) (bool, PvaClientPtr const &, string const &)> functions;
 	
 	map<string, bool (*) (bool, PvaClientPtr const &, string const &)>::iterator it;
 
 	if (true == first_call) {
-		
+	/* init functions map */
 		first_call = false;
 		functions["string"] = &demoString;
 		functions["short"] = &demoShort;
@@ -195,6 +199,8 @@ bool demoMatrix(
 	read_val = getData->getPVStructure()->getSubField<PVDoubleArray>("value")->view();
 
 	stringstream out;
+
+	/* These for loops print out the matrix's dimensions and then contents in a grid. */
 	out << "\n\tMatrix: ";
 	out << "dim:";
 	for (size_t i = 0; i < read_dim.size(); ++i) {
@@ -254,11 +260,13 @@ bool demoURI(
 	string path_read;
 	string query_read;
 
+	/* Get data from the server and read */
 	putGet->getGetData();	
 	scheme_read = getData->getPVStructure()->getSubField<PVString>("scheme")->get();
 	path_read = getData->getPVStructure()->getSubField<PVString>("path")->get();
 	query_read = getData->getPVStructure()->getSubField<PVString>("query.query")->get();
 	
+	/* Print before and after */
 	stringstream out;
 	out << "\n\twrite\n";
 	out << "\t\t" << setw(8) << "scheme: " << scheme_write << endl;
