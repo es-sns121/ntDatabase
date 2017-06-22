@@ -52,24 +52,29 @@ This directory has the following files:
 This directory has the following files:
 
 * ntDatabaseClient.cpp  
+
 Code for a client program that uses pvaClient to access the records
 hosted on the database.
 
 * ntScalarDemo.h
 
 * ntScalarDemo.cpp
+
 Code that demonstrates the functionality of the scalar normative types
 and provides examples on operating on them.
 
 * ntDemo.h
 
 * ntDemo.cpp
+
 Code that demonstrates the functionality of the non-scalar normative types
 and provides examples on operating on them.
 
 * ntDatabase.cpp 
+
 Code that creates many PVRecords.    
 
 * ntDatabaseMain.cpp
+
 Code that allows the PVRecords to be available via a standalone main program.
 
