@@ -80,12 +80,14 @@ int main (int argc, char **argv)
 	cout << "ntDatabase Client\n";
 	
 	string record_types[] = {
-					  "string", "short", "int", "long", "double",      // Scalar nt examples.
+					  "string", "short", "int", "long", "double",      		// Scalar nt examples.
+					  "stringArray", "shortArray", "intArray", 
+					  "longArray", "doubleArray",		  
 					  
-					  "enum", "matrix", "uri", "name_value", "table",  // More specific nt examples
+					  "enum", "matrix", "uri", "name_value", "table",  		// More specific nt examples
 					  "attribute", "multi_channel"};                 
 	
-	int number_of_record_types = 12;
+	int number_of_record_types = 16;
 	
 	try {
 	

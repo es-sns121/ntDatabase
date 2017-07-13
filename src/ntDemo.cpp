@@ -56,7 +56,7 @@ void printResult(const bool &result, const string &channel_name) {
 /* Wrapper function that calls specific demo functions */
 int demoRecord(
 	bool verbosity,
-	PvaClientPtr const & pva,
+	PvaClientPtr pva,
 	string const & channel_name)
 {
 	bool result(false);
@@ -64,25 +64,35 @@ int demoRecord(
 	static bool first_call = true;
 
 	/* map of function pointers keyed on channel name */
-	static map<string, bool (*) (bool, PvaClientPtr const &, string const &)> functions;
+	static map<string, bool (*) (bool, PvaClientChannelPtr)> functions;
 	
-	map<string, bool (*) (bool, PvaClientPtr const &, string const &)>::iterator it;
+	map<string, bool (*) (bool, PvaClientChannelPtr)>::iterator it;
 
 	if (true == first_call) {
 	/* init functions map */
 		first_call = false;
 		functions["string"] = &demoString;
+		functions["stringArray"] = &demoStringArray;
 		functions["short"] = &demoShort;
+		functions["shortArray"] = &demoShortArray;
 		functions["int"] = &demoInt;
+		functions["intArray"] = &demoIntArray;
 		functions["long"] = &demoLong;
+		functions["longArray"] = &demoLongArray;
 		functions["double"] = &demoDouble;
+		functions["doubleArray"] = &demoDoubleArray;
 		functions["enum"] = &demoEnum;
 		functions["matrix"] = &demoMatrix;
 		functions["uri"] = &demoURI;
 		functions["name_value"] = &demoNameValue;
 		functions["table"] = &demoTable;
 		functions["attribute"] = &demoAttribute;
-		functions["multi_channel"] = &demoMultiChannel;
+	}
+
+	if (channel_name.compare("multi_channel") == 0) {
+		result = demoMultiChannel(verbosity, pva, channel_name);
+		printResult(result, channel_name);
+		return 0;
 	}
 
 	it = functions.find(channel_name);
@@ -94,7 +104,13 @@ int demoRecord(
 	
 	} else {	
 	
-		result = (it->second)(verbosity, pva, channel_name);
+		PvaClientChannelPtr channel = pva->channel(channel_name);
+		
+		if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
+		else
+			return 1;
+		
+		result = (it->second)(verbosity, channel);
 		printResult(result, channel_name);
 	
 	}
@@ -106,16 +122,9 @@ int demoRecord(
 /* NTEnum demonstration */
 bool demoEnum(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name)
+	PvaClientChannelPtr channel)
 {
-	bool result(false);
-	
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return result;
+	bool result(true);
 
 	// Create putGet to read and write to/from record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -145,8 +154,8 @@ bool demoEnum(
 
 	out << "\t After write: enum(zero, one) = " << choices[read] << endl << endl;
 
-	if (read == write)
-		result = true;
+	if (read != write)
+		result = false;
 	
 	if (verbosity)
 		cout << out.str();
@@ -157,16 +166,9 @@ bool demoEnum(
 /* NTMatrix demonstration */
 bool demoMatrix(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name)
+	PvaClientChannelPtr channel)
 {
 	bool result(true);
-	
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return result;
 
 	// Create putGet to read and write to/from record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -230,16 +232,9 @@ bool demoMatrix(
 /* NTURI demonstration */
 bool demoURI(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name)
+	PvaClientChannelPtr channel)
 {
-	bool result(false);
-	
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return result;
+	bool result(true);
 
 	// Create putGet to read and write to/from record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -279,10 +274,10 @@ bool demoURI(
 	out << "\t\t" << setw(8) << "path: " << path_read << endl;
 	out << "\t\t" << setw(8) << "query: " << query_read << endl << endl;
 
-	if (scheme_write == scheme_read &&
-		path_write == path_read &&
-		query_write == query_read)
-		result = true;
+	if (scheme_write != scheme_read ||
+		path_write != path_read ||
+		query_write != query_read)
+		result = false;
 
 	if (verbosity)
 		cout << out.str();
@@ -293,16 +288,9 @@ bool demoURI(
 /* NTNameValue demonstration */
 bool demoNameValue(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name)
+	PvaClientChannelPtr channel)
 {
 	bool result(true);
-	
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return result;
 
 	// Create putGet to read and write to/from record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -357,17 +345,10 @@ bool demoNameValue(
 /* NTTable demonstration */
 bool demoTable(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name)
+	PvaClientChannelPtr channel)
 {
 	bool result(true);
 	
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return result;
-
 	// Create putGet to read and write to/from record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
@@ -440,22 +421,16 @@ bool demoTable(
 
 	if (verbosity)
 		cout << out.str();
+	
 	return result;
 }
 
 /* NTAttribute demonstration */
 bool demoAttribute(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name)
+	PvaClientChannelPtr channel)
 {
 	bool result(true);
-	
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return result;
 
 	// Create putGet to read and write to/from record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -494,8 +469,8 @@ bool demoAttribute(
 /* NTMultiChannel Demo */
 bool demoMultiChannel(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name)
+	PvaClientPtr pva,
+	const string & channel_name)
 {
 	bool result(true);
 	
@@ -503,8 +478,8 @@ bool demoMultiChannel(
 	
 	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
 	else
-		return result;
-
+		return false;
+	
 	// Create putGet to read and write to/from record.
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
@@ -515,7 +490,6 @@ bool demoMultiChannel(
 	PvaClientChannelPtr channel_long   = pva->channel("long");
 	
 	bool long_connect = (channel_long) ? true : false;
-	result = (long_connect) ? true : false;
 
 	PvaClientGetPtr long_get = channel_long->createGet();
 	PvaClientGetDataPtr long_data = long_get->getData();
@@ -523,7 +497,8 @@ bool demoMultiChannel(
 	PvaClientChannelPtr channel_double = pva->channel("double");
 	
 	bool double_connect = (channel_double) ? true : false;
-	result = (double_connect) ? true : false;
+	
+	result = (long_connect && double_connect) ? true : false;
 	
 	PvaClientGetPtr double_get = channel_double->createGet();
 	PvaClientGetDataPtr double_data = double_get->getData();
@@ -563,4 +538,3 @@ bool demoMultiChannel(
 
 	return result;
 }
-

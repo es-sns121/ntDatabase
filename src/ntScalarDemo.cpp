@@ -39,17 +39,9 @@ string genString() {
 
 bool demoString(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-
-	bool result(true);
-
+	bool result(true);	
 	string write_str = genString();
 
 	// Write the string to the record.
@@ -75,20 +67,13 @@ bool demoString(
 	if (write_str.compare(read_str) != 0)
 		result = false;
 		
-	return (result && demoStringArray(verbosity, pva, string(channel_name + "Array")));
+	return result;
 }
 
 bool demoStringArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-
 	bool result(true);
 
 	// Write the string to the record.
@@ -134,23 +119,16 @@ bool demoStringArray(
 
 bool demoShort(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
+	bool result(true);
 
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
 
-	bool result(false);
-
 	short write = genInt(32767);
-
+	
 	putData->getPVStructure()->getSubField<PVShort>("value")->put(write);
 	putGet->putGet();
 
@@ -162,24 +140,19 @@ bool demoShort(
 		cout << setw(20) << "Read Short: " << read << "\n\n";
 	}
 
-	if (write == read)
-		result = true;
+	if (write != read)
+		result = false;
 
-	return (result && demoShortArray(verbosity, pva, string(channel_name + "Array")));
+	return result;
 
 }
 
 bool demoShortArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-	
+	bool result(true);
+
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
@@ -211,28 +184,21 @@ bool demoShortArray(
 		}
 
 		if (write[i] != read[i])
-			return false;
+			result = false;
 	}
-			
-	return true;
+	
+	return result;
 }
 
 bool demoInt(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
+	bool result(true);
 
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
-
-	bool result(false);
 
 	int write = genInt(INT_MAX);
 
@@ -246,24 +212,19 @@ bool demoInt(
 		cout << setw(20) << "Write Int: " << write << "\n";
 		cout << setw(20) << "Read Int: " << read << "\n\n";
 	}
-	if (write == read)
-		result = true;
+	if (write != read)
+		result = false;
 
-	return (result && demoIntArray(verbosity, pva, string(channel_name + "Array")));
+	return result;
 
 }
 
 bool demoIntArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
+	bool result(true);
 
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-	
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
@@ -296,29 +257,21 @@ bool demoIntArray(
 		}
 
 		if (write[i] != read[i])
-			return false;
+			result = false;
 	}
-			
-	return true;
+
+	return result;
 }
 
 bool demoLong(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-
+	bool result(true);
 
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
 	PvaClientPutDataPtr putData = putGet->getPutData();
 	PvaClientGetDataPtr getData = putGet->getGetData();
-
-	bool result(false);
 
 	long write = genInt(INT_MAX);
 
@@ -326,6 +279,7 @@ bool demoLong(
 	putGet->putGet();
 	
 	putGet->getGetData();
+	
 	long read = getData->getPVStructure()->getSubField<PVLong>("value")->get();
 	
 	if(verbosity)
@@ -333,24 +287,16 @@ bool demoLong(
 		cout << setw(20) << "Write Long: " << write << "\n";
 		cout << setw(20) << "Read Long: " << read << "\n\n";
 	}
-	if (write == read)
-		result = true;
+	if (write != read)
+		result = false;
 
-	return (result && demoLongArray(verbosity, pva, string(channel_name + "Array")));
-
+	return result;
 }
 
 bool demoLongArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-
 	bool result(true);
 
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -400,15 +346,10 @@ double genDouble()
 
 bool demoDouble(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-	
+	bool result(true);
+
 	double write = genDouble();
 
 	// Write the string to the record.
@@ -432,22 +373,17 @@ bool demoDouble(
 	}
 
 	if (write != read)
-		return false;
-	
-	return (true && demoDoubleArray(verbosity, pva, string(channel_name + "Array")));
+		result = false;
+
+	return result;
 }
 
 bool demoDoubleArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name)
+	PvaClientChannelPtr channel)
 {
-	PvaClientChannelPtr channel = pva->channel(channel_name);
-	
-	if (channel) cout << "\nChannel \"" << channel_name << "\" connected succesfully\n";
-	else
-		return false;
-	
+	bool result(true);
+
 	// Write the double to the record.
 	
 	PvaClientPutGetPtr putGet = channel->createPutGet("");
@@ -482,8 +418,8 @@ bool demoDoubleArray(
 		}
 
 		if (write[i] != read[i])
-			return false;
+			result = false;
 	}
 			
-	return true;
+	return result;
 }

@@ -46,42 +46,36 @@ void printResult(const bool &result, const string &channel_name);
 
 int demoRecord(
 	bool verbosity,
-	PvaClientPtr const & pva,
+	PvaClientPtr pva,
 	string const & channel_name);
 
 bool demoEnum(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name);	
+	PvaClientChannelPtr channel);
 
 bool demoMatrix(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name);	
+	PvaClientChannelPtr channel);
 
 bool demoURI(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name);	
+	PvaClientChannelPtr channel);
 
 bool demoNameValue(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name);	
+	PvaClientChannelPtr channel);
 
 bool demoTable(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name);	
+	PvaClientChannelPtr channel);
 
 bool demoAttribute(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name);	
+	PvaClientChannelPtr channel);
 
 bool demoMultiChannel(
 	bool verbosity,
-	PvaClientPtr const & pva,
-	string const & channel_name);	
+	PvaClientPtr pva,
+	const string & channel_name);
 
 #endif /* NTDEMO_H */

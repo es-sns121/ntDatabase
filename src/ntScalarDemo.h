@@ -39,58 +39,48 @@ string genString();
 
 bool demoString(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 bool demoStringArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 // Generates a "random" integer in the range 0 to high.
 long genInt(long high);
 
 bool demoShort(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 bool demoShortArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 bool demoInt(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 bool demoIntArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 bool demoLong(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 bool demoLongArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 // Generates a "random" floating point number.
 double genDouble();
 
 bool demoDouble(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 bool demoDoubleArray(
 	bool verbosity,
-	PvaClientPtr const &pva,
-	string const &channel_name);
+	PvaClientChannelPtr channel);
 
 #endif /* NTSCALARDEMO_H */
