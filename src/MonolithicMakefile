@@ -1,0 +1,51 @@
+top = ..
+
+include $(top)/configure/config
+
+bin = $(top)/bin
+
+EPICS_INCLUDE += -I$(EPICS_V3_DIR)/include                   \
+				-I$(EPICS_V3_DIR)/include/compiler/gcc       \
+				-I$(EPICS_V3_DIR)/include/valgrind           \
+				-I$(EPICS_V3_DIR)/include/os/$(HOST_OS)      \
+				-I$(EPICS_V4_DIR)/pvAccessCPP/include        \
+				-I$(EPICS_V4_DIR)/pvDataCPP/include          \
+				-I$(EPICS_V4_DIR)/normativeTypesCPP/include  \
+				-I$(EPICS_V4_DIR)/pvaClientCPP/include       \
+				-I$(EPICS_V4_DIR)/pvDatabaseCPP/include      \
+				-I$(EPICS_V4_DIR)/pvCommonCPP/include
+
+EPICS_LIBRARY += -L$(EPICS_V3_DIR)/lib/$(EPICS_HOST_ARCH) -lCom                     \
+				-L$(EPICS_V4_DIR)/pvDataCPP/lib/$(EPICS_HOST_ARCH) -lpvData         \
+				-L$(EPICS_V4_DIR)/pvAccessCPP/lib/$(EPICS_HOST_ARCH) -lpvAccess     \
+				-L$(EPICS_V4_DIR)/pvCommonCPP/lib/$(EPICS_HOST_ARCH) -lpvMB         \
+				-L$(EPICS_V4_DIR)/pvaClientCPP/lib/$(EPICS_HOST_ARCH) -lpvaClient   \
+				-L$(EPICS_V4_DIR)/pvDatabaseCPP/lib/$(EPICS_HOST_ARCH) -lpvDatabase \
+				-L$(EPICS_V4_DIR)/normativeTypesCPP/lib/$(EPICS_HOST_ARCH) -lnt   
+
+CPP_FLAGS = -Wall -g -lpthread -lm 
+
+all : client server
+
+# Client Sources
+clientSrc = ntDatabaseClient.cpp ntDemo.cpp ntScalarDemo.cpp
+# Client Dependencies
+clientDep = ntDemo.h ntScalarDemo.h $(clientSrc)
+
+# Server Sources
+serverSrc = ntDatabaseMain.cpp ntDatabase.cpp
+# Server Dependencies
+serverDep = pv/ntDatabase.h $(serverSrc)
+
+client: $(clientDep)
+	mkdir -p $(top)/bin
+	g++ $(CPP_FLAGS) $(EPICS_INCLUDE) $(EPICS_LIBRARY) $(clientSrc) -o $(bin)/client
+
+server: $(serverDep)
+	mkdir -p $(top)/bin
+	g++ $(CPP_FLAGS) $(EPICS_INCLUDE) $(EPICS_LIBRARY) $(serverSrc) -o $(bin)/server
+
+.PHONY: clean
+clean:
+	@printf "Cleaning binaries...\n"
+	rm -rf $(bin)/*
