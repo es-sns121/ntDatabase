@@ -4,7 +4,5 @@
 # Executable
 EXEC=ntDatabaseMain
 # Directory 
-DIR=ntDatabase
-EV4_BASE=~/Epics/EPICS-CPP-4.5.0
-
-$EV4_BASE/$DIR/bin/$EPICS_HOST_ARCH/$EXEC $1
+DIR=exampleCPP/ntDatabase
+$EPICS_V4_DIR/$DIR/bin/$EPICS_HOST_ARCH/$EXEC $1
